@@ -1,8 +1,8 @@
 import org.newdawn.slick.*;
 
-public class Player {
+public class Character {
 
-	Image playerImage = null;
+	Image characterImage = null;
 	int life;
 	int height;
 	int width;
@@ -19,7 +19,7 @@ public class Player {
 	float scale;
 	float fallCounter;
 	
-	public Player()
+	public Character()
 	{
 		life = 3;
 		
@@ -30,24 +30,28 @@ public class Player {
 		fallCounter = 0;
 	}
 	
-	public void loadPlayerImage(String file) throws SlickException
+	public void loadCharacterImage(String file) throws SlickException
 	{
-		playerImage = new Image(file);
-		height = playerImage.getHeight(); //must occur at start
+		characterImage = new Image(file);
+		height = characterImage.getHeight(); //must occur at start
 		x = 0; //initial position
 		y = 400 - height;
 	}
 	
-	public void drawPlayer()
+	public void drawCharacter()
 	{
-		playerImage.draw(x, y, scale);
+		characterImage.draw(x, y, scale);
 	}
 	
 	//jump method, make smooth says Josh
+	public void jump()
+	{
+		
+	}
 	
-	public void fall() //gravity effect
+	/*public void fall() //gravity effect
 	{
 		y += fallCounter; //falls faster than moves up
 		fallCounter += 0.1;
-	}
+	}*/
 }

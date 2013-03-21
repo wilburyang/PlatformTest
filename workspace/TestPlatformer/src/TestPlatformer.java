@@ -2,8 +2,9 @@ import org.newdawn.slick.*;
 
 public class TestPlatformer extends BasicGame {
 
+	World world = null;
 	PlatformLevel lvl1 = null;
-	Player player1 = null;
+	Character player1 = null;
 	
 	public TestPlatformer()
 	{
@@ -13,10 +14,11 @@ public class TestPlatformer extends BasicGame {
 	@Override
 	public void init (GameContainer gc) throws SlickException
 	{
+		world = new World(); //creates new set of world parameters
 		lvl1 =  new PlatformLevel(); //create new level object
 		lvl1.loadBackground("data/testbackground.png", "data/testfloor.png");
-		player1 = new Player();
-		player1.loadPlayerImage("data/testplayer.png");
+		player1 = new Character();
+		player1.loadCharacterImage("data/testplayer.png");
 	}
 	
 	@Override
@@ -24,58 +26,23 @@ public class TestPlatformer extends BasicGame {
 	{
 		Input input = gc.getInput();
 		
-		if(input.isKeyDown(Input.KEY_D) && player1.isOnGround) //normal movement on ground
+		if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
 		{
 			player1.x += player1.speed*delta;
-			player1.direction = player1.forward;
 		}
-		if(input.isKeyDown(Input.KEY_A) && player1.isOnGround)
+		if(input.isKeyDown(Input.KEY_A))
 		{
 			player1.x -= player1.speed*delta;
-			player1.direction = player1.backward;
 		}
 		
 		if(input.isKeyDown(Input.KEY_W)) //jump command
 		{
-			player1.y -= player1.speed*delta;
-			player1.isOnGround = false;
-			
-			player1.direction = player1.neutral; //default dir in jump
-			if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
-			{
-				player1.direction = player1.forward;
-			}
-			if(input.isKeyDown(Input.KEY_A))
-			{
-				player1.direction = player1.backward;
-			}
+			player1.jump();
 		}
 		
-		if(!player1.isOnGround)
-		{
-			player1.fall();
-			//shifts player based on last direction while in air
-			if(player1.direction == player1.forward)
-			{
-				player1.x += player1.speed*delta;
-			}
-			if(player1.direction == player1.backward)
-			{
-				player1.x -= player1.speed*delta;
-			}
-		}
-		
-		if(player1.y > (400 - player1.height)) //prevents falling through ground
-		{
-			player1.y = (400 - 50);
-			player1.isOnGround = true; //checks that player is on ground
-			player1.fallCounter = 0; //resets fallCounter - gravity
-		}
-		
-		if(player1.x < 0)
-		{
-			player1.x = 0;
-		}
+		//will be array of all objects
+		world.floor(player1);
+		world.wall(player1);
 	}
 	
 	@Override
@@ -83,7 +50,7 @@ public class TestPlatformer extends BasicGame {
 	{
 		//g.drawString("Hello World", 100, 100);
 		lvl1.drawLevel(); //draws Background
-		player1.drawPlayer();
+		player1.drawCharacter();
 	}
 	
 	public static void main (String[] args) throws SlickException
