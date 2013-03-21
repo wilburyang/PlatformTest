@@ -24,25 +24,52 @@ public class TestPlatformer extends BasicGame {
 	{
 		Input input = gc.getInput();
 		
-		if(input.isKeyDown(Input.KEY_D))
+		if(input.isKeyDown(Input.KEY_D) && player1.isOnGround) //normal movement on ground
 		{
 			player1.x += player1.speed*delta;
+			player1.direction = player1.forward;
 		}
-		if(input.isKeyDown(Input.KEY_A))
+		if(input.isKeyDown(Input.KEY_A) && player1.isOnGround)
 		{
 			player1.x -= player1.speed*delta;
+			player1.direction = player1.backward;
 		}
 		
-		if(input.isKeyDown(Input.KEY_W) && player1.isOnGround) //needs gravity and a jump
+		if(input.isKeyDown(Input.KEY_W)) //jump command
 		{
 			player1.y -= player1.speed*delta;
 			player1.isOnGround = false;
+			
+			player1.direction = player1.neutral; //default dir in jump
+			if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
+			{
+				player1.direction = player1.forward;
+			}
+			if(input.isKeyDown(Input.KEY_A))
+			{
+				player1.direction = player1.backward;
+			}
 		}
 		
-		if(player1.y > (400 - 50)) //to be minus height
+		if(!player1.isOnGround)
+		{
+			player1.fall();
+			//shifts player based on last direction while in air
+			if(player1.direction == player1.forward)
+			{
+				player1.x += player1.speed*delta;
+			}
+			if(player1.direction == player1.backward)
+			{
+				player1.x -= player1.speed*delta;
+			}
+		}
+		
+		if(player1.y > (400 - player1.height)) //prevents falling through ground
 		{
 			player1.y = (400 - 50);
-			player1.isOnGround = true;
+			player1.isOnGround = true; //checks that player is on ground
+			player1.fallCounter = 0; //resets fallCounter - gravity
 		}
 		
 		if(player1.x < 0)
