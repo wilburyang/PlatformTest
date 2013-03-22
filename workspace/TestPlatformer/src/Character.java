@@ -8,14 +8,15 @@ public class Character {
 	int width;
 	float x;
 	float y;
-	int direction; //testing for directional jump
+	/*int direction; //testing for directional jump
 	int forward = 1;
 	int backward = -1; //workaround for direction names
 	int neutral = 0;
 	
-	boolean isOnGround;
+	boolean isOnGround;*/
 	
 	float speed;
+	float ySpeed;
 	float scale;
 	float fallCounter;
 	
@@ -23,10 +24,11 @@ public class Character {
 	{
 		life = 3;
 		
-		isOnGround = true;
+		//isOnGround = true;
 		
 		scale = 1.0f;
 		speed = 0.2f;
+		ySpeed = speed; //adjusts for jumps
 		fallCounter = 0;
 	}
 	
@@ -43,10 +45,10 @@ public class Character {
 		characterImage.draw(x, y, scale);
 	}
 	
-	//jump method, make smooth says Josh
+	//jump method, make smooth
 	public void jump()
 	{
-		
+		y -= speed; //gives initial movement
 	}
 	
 	/*public void fall() //gravity effect

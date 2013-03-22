@@ -16,9 +16,12 @@ public class TestPlatformer extends BasicGame {
 	{
 		world = new World(); //creates new set of world parameters
 		lvl1 =  new PlatformLevel(); //create new level object
-		lvl1.loadBackground("data/testbackground.png", "data/testfloor.png");
+		lvl1.loadBackground("data/testbackground.png",
+				"data/testfloor.png", "data/floor_tile.png");
+		//lvl1.loadTile("data/floor_tile.png");
 		player1 = new Character();
 		player1.loadCharacterImage("data/testplayer.png");
+		
 	}
 	
 	@Override
@@ -28,6 +31,7 @@ public class TestPlatformer extends BasicGame {
 		
 		if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
 		{
+			//add horizontal accel in air
 			player1.x += player1.speed*delta;
 		}
 		if(input.isKeyDown(Input.KEY_A))
@@ -37,11 +41,15 @@ public class TestPlatformer extends BasicGame {
 		
 		if(input.isKeyDown(Input.KEY_W)) //jump command
 		{
-			player1.jump();
+			if(world.isOnGround(player1))
+			{
+				player1.jump();
+			}
 		}
 		
 		//will be array of all objects
-		world.floor(player1);
+		world.gravity(player1, delta);
+		world.floor(player1); //makes sure player is on ground, not needed
 		world.wall(player1);
 	}
 	
