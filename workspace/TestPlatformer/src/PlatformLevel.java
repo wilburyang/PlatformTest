@@ -38,9 +38,9 @@ public class PlatformLevel {
 			tileMap[i].x = tileMap[i-1].x + tileMap[i-1].width;
 		}
 		//collision test tile
-		tileMap[++i].loadImage(file);
-		tileMap[i].x = 200;
-		tileMap[i].y = 300;
+		tileMap[20].loadImage(file);
+		tileMap[20].x = 200;
+		tileMap[20].y = 300;
 	}
 	
 	public void drawLevel()
@@ -48,7 +48,7 @@ public class PlatformLevel {
 		background.draw(0, 0);
 		floor.draw(0, 400);
 		
-		for(int i=0; i<tileMap.length; i++)
+		for(int i=0; i<21; i++)
 		{
 			tileMap[i].draw(); //temp draw one tile
 		}

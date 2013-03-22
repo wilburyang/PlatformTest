@@ -35,7 +35,8 @@ public class Character {
 	public void loadCharacterImage(String file) throws SlickException
 	{
 		characterImage = new Image(file);
-		height = characterImage.getHeight(); //must occur at start
+		width = (int) (characterImage.getWidth()*scale);
+		height = (int) (characterImage.getHeight()*scale); //must occur at start
 		x = 0; //initial position
 		y = 400 - height;
 	}
@@ -49,6 +50,32 @@ public class Character {
 	public void jump()
 	{
 		y -= speed; //gives initial movement
+	}
+	
+	public void checkCollision(Tile object)
+	{
+		if(x > object.x && x < object.x+object.width) //check x axis collision
+		{
+			if(y > object.y && x <= object.y+object.height) //check y axis collision
+			{
+				
+			}
+			if(y > object.y && x <= object.y+object.height) //check y axis collision
+			{
+				
+			}
+		}
+		if(x+width < object.x && x+width > object.width)
+		{
+			if(y > object.y && x <= object.y+object.height) //check y axis collision
+			{
+				
+			}
+			if(y > object.y && x <= object.y+object.height) //check y axis collision
+			{
+				
+			}
+		}
 	}
 	
 	/*public void fall() //gravity effect
