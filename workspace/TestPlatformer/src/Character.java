@@ -8,6 +8,9 @@ public class Character {
 	int width;
 	float x;
 	float y;
+	
+	boolean isOnTile; //floating tile floor
+	
 	/*int direction; //testing for directional jump
 	int forward = 1;
 	int backward = -1; //workaround for direction names
@@ -18,7 +21,6 @@ public class Character {
 	float speed;
 	float ySpeed;
 	float scale;
-	float fallCounter;
 	
 	public Character()
 	{
@@ -29,7 +31,8 @@ public class Character {
 		scale = 1.0f;
 		speed = 0.2f;
 		ySpeed = speed; //adjusts for jumps
-		fallCounter = 0;
+		
+		//isOnTile = true;
 	}
 	
 	public void loadCharacterImage(String file) throws SlickException
@@ -52,35 +55,41 @@ public class Character {
 		y -= speed; //gives initial movement
 	}
 	
-	public void checkCollision(Tile object)
+	public void checkCollision(Tile object, GameContainer gc)
 	{
-		if(x > object.x && x < object.x+object.width) //check x axis collision
+		Input input = gc.getInput();
+		
+		if(x+width > object.x && x < object.x+object.width
+				&& y+height >= object.y && y+height < object.y+object.height)//staying on ground
 		{
-			if(y > object.y && x <= object.y+object.height) //check y axis collision
+			y = object.y-height;
+			isOnTile = true;
+		}
+		else
+		{
+			isOnTile = false;
+		}
+		if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
+		{
+			if(x+width > object.x && x < object.x+object.width
+					&& y > object.y+object.height && y < object.y) //check x axis collision
 			{
-				
-			}
-			if(y > object.y && x <= object.y+object.height) //check y axis collision
-			{
-				
+				x = object.x-width;
 			}
 		}
-		if(x+width < object.x && x+width > object.width)
+		if(input.isKeyDown(Input.KEY_A)) //normal movement on ground
 		{
-			if(y > object.y && x <= object.y+object.height) //check y axis collision
+			if(x+width > object.x && x < object.x+object.width && y+height > object.y && y+height < object.y+object.height) //check x axis collision
 			{
-				
+				x = object.x+object.width;
 			}
-			if(y > object.y && x <= object.y+object.height) //check y axis collision
+		}
+		if(input.isKeyDown(Input.KEY_W)) //normal movement on ground
+		{
+			if(x+width > object.x && x < object.x+object.width && y+height > object.y && y < object.y+object.height) //check x axis collision
 			{
-				
+				y = object.y+object.height;
 			}
 		}
 	}
-	
-	/*public void fall() //gravity effect
-	{
-		y += fallCounter; //falls faster than moves up
-		fallCounter += 0.1;
-	}*/
 }

@@ -1,13 +1,13 @@
 //import org.newdawn.slick.*;
 
-public class World {
+public class World extends TestPlatformer {
 	//make gravity method
-	int floorpos;
+	//int floorpos;
 	double gCount; //acceleration with time
 	
 	World()
 	{
-		floorpos = 400;
+		//floorpos = 400;
 		gCount = 0.0;
 	}
 	
@@ -31,7 +31,7 @@ public class World {
 	
 	public boolean isOnGround(Character ch)
 	{
-		if(ch.y >= (floorpos - ch.height)) //prevents falling through ground
+		if(ch.isOnTile)
 		{
 			return true;
 		}
@@ -41,14 +41,17 @@ public class World {
 		}
 	}
 	
-	public void floor (Character ch) //floor barrier
+	/*public void floor (Character ch) //floor barrier
 	{
 		if(isOnGround(ch))
 		{
-			ch.y = (floorpos - ch.height);
+			if(ch.y >= (floorpos - ch.height))
+			{
+				ch.y = (floorpos - ch.height);
+			}
 			ch.ySpeed = ch.speed; //reset acceleration
 		}
-	}
+	}*/
 	
 	public void wall(Character ch) //wall barrier
 	{

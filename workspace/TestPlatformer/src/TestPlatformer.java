@@ -1,71 +1,29 @@
 import org.newdawn.slick.*;
+import org.newdawn.slick.state.*;
 
-public class TestPlatformer extends BasicGame {
+public class TestPlatformer extends StateBasedGame {
 
-	World world = null;
-	PlatformLevel lvl1 = null;
-	Character player1 = null;
+	public static final int MAINMENUSTATE		= 0;
+	public static final int GAMEPLAYSTATE		= 1;
+	public static final int LEVELEDITORSTATE	= 2;
 	
 	public TestPlatformer()
 	{
 		super("Our Cool Platformer");
 	}
 	
-	@Override
-	public void init (GameContainer gc) throws SlickException
-	{
-		world = new World(); //creates new set of world parameters
-		lvl1 =  new PlatformLevel(); //create new level object
-		lvl1.loadBackground("data/testbackground.png",
-				"data/testfloor.png", "data/floor_tile.png");
-		//lvl1.loadTile("data/floor_tile.png");
-		player1 = new Character();
-		player1.loadCharacterImage("data/testplayer.png");
-		
-	}
+	public static void main(String[] args) throws SlickException
+    {
+         AppGameContainer app = new AppGameContainer(new TestPlatformer());
+ 
+         app.setDisplayMode(800, 600, false);
+         app.start();
+    }
 	
 	@Override
-	public void update(GameContainer gc, int delta) throws SlickException
-	{
-		Input input = gc.getInput();
-		
-		if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
-		{
-			//add horizontal accel in air
-			player1.x += player1.speed*delta;
-		}
-		if(input.isKeyDown(Input.KEY_A))
-		{
-			player1.x -= player1.speed*delta;
-		}
-		
-		if(input.isKeyDown(Input.KEY_W)) //jump command
-		{
-			if(world.isOnGround(player1))
-			{
-				player1.jump();
-			}
-		}
-		
-		//will be array of all objects
-		world.gravity(player1, delta);
-		world.floor(player1); //makes sure player is on ground, not needed
-		world.wall(player1);
-	}
-	
-	@Override
-	public void render(GameContainer gc, Graphics g) throws SlickException
-	{
-		//g.drawString("Hello World", 100, 100);
-		lvl1.drawLevel(); //draws Background
-		player1.drawCharacter();
-	}
-	
-	public static void main (String[] args) throws SlickException
-	{
-		AppGameContainer app = new AppGameContainer(new TestPlatformer());
-		app.setDisplayMode(800, 600, false);
-		
-		app.start();
-	}
+    public void initStatesList(GameContainer gameContainer) throws SlickException {
+        this.addState(new MainMenuState(MAINMENUSTATE));
+        this.addState(new LevelEditor(LEVELEDITORSTATE));
+        this.addState(new GameplayState(GAMEPLAYSTATE));
+    }
 }
