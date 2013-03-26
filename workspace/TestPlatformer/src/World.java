@@ -11,7 +11,7 @@ public class World extends TestPlatformer {
 		gCount = 0.0;
 	}
 	
-	public void gravity(Character ch, int change) //adjust movement with gravity
+	public void gravity(Character ch, int change) //consider moving to main gameplay class
 	{
 		
 		if(!isOnGround(ch)) //if not on ground, then jumping

@@ -1,4 +1,5 @@
 import org.newdawn.slick.*;
+import org.newdawn.slick.tiled.*;
 
 public class Character {
 
@@ -22,6 +23,8 @@ public class Character {
 	float ySpeed;
 	float scale;
 	
+	boolean fallen; //checks if fallen off map
+	
 	public Character()
 	{
 		life = 3;
@@ -33,6 +36,8 @@ public class Character {
 		ySpeed = speed; //adjusts for jumps
 		
 		//isOnTile = true;
+		
+		fallen = false;
 	}
 	
 	public void loadCharacterImage(String file) throws SlickException
@@ -55,11 +60,47 @@ public class Character {
 		y -= speed; //gives initial movement
 	}
 	
-	public void checkCollision(Tile object, GameContainer gc)
+	public boolean isCollision(PlatformLevel level, GameContainer gc)
 	{
-		Input input = gc.getInput();
+		//Input input = gc.getInput();
 		
-		if(x+width > object.x && x < object.x+object.width
+		//temp floor:
+		if(y+height>=600)
+		{
+			y = 600-height;
+		}
+		
+		//check if any of character is touching barrier
+		int xPos = (int)x/30; //divided by tile size
+		int yPos = (int)y/30;
+		
+		System.out.println(xPos + " , " + yPos);
+		
+		//simplified checker
+		if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
+		{
+			System.out.println("barrier!");
+			return true;
+		}
+		return false;
+		
+		/*for(int xAxis=(int)(x/30); xAxis<Math.floor((x+width)/30);xAxis++)
+		{
+			for(int yAxis=(int)(y/30); yAxis<(Math.floor(y+height)/30);yAxis++)
+			{
+				if(barriers[xAxis][yAxis]) //checks with boxes tile dimensions
+				{
+					System.out.println("barrier!");
+					speed = 0;
+					ySpeed = 0;
+				}
+			}
+		}*/
+		
+		
+		
+		//old:
+		/*if(x+width > object.x && x < object.x+object.width
 				&& y+height >= object.y && y+height < object.y+object.height)//staying on ground
 		{
 			y = object.y-height;
@@ -90,6 +131,6 @@ public class Character {
 			{
 				y = object.y+object.height;
 			}
-		}
+		}*/
 	}
 }

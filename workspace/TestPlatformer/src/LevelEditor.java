@@ -1,11 +1,13 @@
 import java.io.*;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
+import org.newdawn.slick.tiled.TiledMap;
 
+//work with tmx files TiledMap --not needed
 public class LevelEditor extends BasicGameState {
 	
 	EditorObject bg = null;
-	EditorObject button = null;
+	EditorObject button[] = null;
 	float scale = 1.0f;
 	
 	int stateID = -1;
@@ -24,7 +26,17 @@ public class LevelEditor extends BasicGameState {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
 	{
 		bg = new EditorObject("data/leveleditor_bg.png", 0, 0, 1.0);
-		button = new EditorObject("data/testbutton.png", 50, 400, 0.5);
+		
+		button = new EditorObject[4];
+		button[0] = new EditorObject("data/testbutton.png", 25, 400, 0.25);
+		for(int i=1; i<button.length; i++) //create multiple buttons with same image
+		{
+			button[i] = new EditorObject("data/testbutton.png",
+					(button[i-1].x+(button[i-1].image.getWidth()/4)+25), 400, 0.25);
+		}
+		button[0].setText("Add Tile");
+		button[1].setText("Remove Tile");
+		button[0].setText("Select Tile");
 	}
 	
 	@Override
@@ -64,8 +76,11 @@ public class LevelEditor extends BasicGameState {
 	
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
 	{
-		bg.drawObject();
-		button.drawObject();
+		bg.drawObject(g);
+		for(int i=0; i<button.length; i++) //draw all buttons
+		{
+			button[i].drawObject(g);
+		}
 	}
 }
 

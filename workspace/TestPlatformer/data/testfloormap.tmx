@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="20" tilewidth="30" tileheight="30">
+ <tileset firstgid="1" name="floor_tile.png" tilewidth="30" tileheight="30">
+  <image source="floor_tile.png" width="400" height="400"/>
+ </tileset>
+ <tileset firstgid="170" name="floor_tile" tilewidth="30" tileheight="30">
+  <image source="floor_tile.png" width="400" height="400"/>
+ </tileset>
+ <tileset firstgid="339" name="testbackground" tilewidth="30" tileheight="30">
+  <image source="testbackground.png" width="800" height="600"/>
+ </tileset>
+ <tileset firstgid="859" name="brick_tile" tilewidth="30" tileheight="30">
+  <properties>
+   <property name="barrier" value="true"/>
+  </properties>
+  <image source="brick_tile.png" width="30" height="30"/>
+ </tileset>
+ <layer name="floor" width="100" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+2VQQ6AIAwESXym//+H8UYUKgXKrmEn6ckA7SzBlIQQgpfzQHfwb25/ebV+s/YR3+Senp4tj94slEedWXe/tK8oYznVvZ2Lx7W8x9Hiepc80HOh3aLnr/Wyuh+Gu44+nwl0Hru8f60gfVhnR/bAkr/3/zxS+f7RZ0X07fVZW9/ja9VcaNejmfSsVR7Y/pUHVykPrlIeXKU83nUBB7JEiUAfAAA=
+  </data>
+ </layer>
+</map>

@@ -1,11 +1,15 @@
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
+import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.tiled.*;
 
 public class GameplayState extends BasicGameState {
 
 	World world = null;
 	PlatformLevel lvl1 = null;
 	Character player1 = null;
+	
+	//TiledMap map;
 	
 	int stateID = -1;
 	 
@@ -21,10 +25,13 @@ public class GameplayState extends BasicGameState {
  
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
     {
+    	//map = new TiledMap("data/TestTileMap.tmx","data");
+    	
     	world = new World(); //creates new set of world parameters
 		lvl1 =  new PlatformLevel(); //create new level object
 		lvl1.loadBackground("data/testbackground.png",
 				"data/testfloor.png", "data/floor_tile.png");
+		lvl1.loadTiles("data/testfloormap.tmx");
 		
 		player1 = new Character();
 		player1.loadCharacterImage("data/testplayer.png");
@@ -39,10 +46,18 @@ public class GameplayState extends BasicGameState {
 		{
 			//add horizontal accel in air
 			player1.x += player1.speed*delta;
+			if(player1.isCollision(lvl1, gc)) //check for each input
+			{
+				//change speed or position based on input dir
+			}
 		}
 		if(input.isKeyDown(Input.KEY_A))
 		{
 			player1.x -= player1.speed*delta;
+			if(player1.isCollision(lvl1, gc))
+			{
+				
+			}
 		}
 		
 		if(input.isKeyDown(Input.KEY_W)) //jump command
@@ -50,6 +65,10 @@ public class GameplayState extends BasicGameState {
 			if(world.isOnGround(player1))
 			{
 				player1.jump();
+				if(player1.isCollision(lvl1, gc))
+				{
+					
+				}
 			}
 		}
 		else
@@ -64,27 +83,40 @@ public class GameplayState extends BasicGameState {
 		
 		//will be array of all objects
 		world.gravity(player1, delta);
+		//collision check after gravity is floor check since only y decreases
+		if(player1.isCollision(lvl1, gc)) //checks neutral collision
+		{
+			player1.y -= 30;
+			player1.isOnTile = true;
+			
+		}
+		
 		//world.floor(player1); //makes sure player is on ground, not needed
 		world.wall(player1);
 		
-		int n = 0;
-		boolean collision = false;
-		while(!collision && n < 21) //tile collision check loop
-		{
-			player1.checkCollision(lvl1.tileMap[n], gc);
-			if(player1.isOnTile)
-			{
-				collision = true;
-			}
-			n++;
-		}
-		n = 0;
+		//player1.isCollision(lvl1.tilefloor, lvl1.barrier, gc);
+		
+		//int n = 0;
+		//boolean collision = false;
+		//while(!collision && n < 21) //tile collision check loop
+		//{
+			//player1.checkCollision(lvl1.tilefloor, lvl1.barrier, gc);
+			//if(player1.isOnTile)
+			//{
+			//	collision = true;
+			//}
+			//n++;
+		//}
+		//n = 0;
     }
 	
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
     {
     	//g.drawString("Hello World", 100, 100);
+    	
+    	//just draw when needed?
     	lvl1.drawLevel(); //draws Background
+    	//map.render(0, 0, 0, 0, 800, 600); //test render of tilemap
     	player1.drawCharacter();
     }
 	
