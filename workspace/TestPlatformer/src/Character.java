@@ -10,8 +10,6 @@ public class Character {
 	float x;
 	float y;
 	
-	boolean isOnTile; //floating tile floor
-	
 	/*int direction; //testing for directional jump
 	int forward = 1;
 	int backward = -1; //workaround for direction names
@@ -56,10 +54,12 @@ public class Character {
 	}
 	
 	//jump method, make smooth
-	public void jump()
+	public void jump(int change)
 	{
 		System.out.println("jumping");
-		y -= 20; //gives initial movement
+		ySpeed += 0.5;
+		y -= ySpeed;
+		//y -= 100; //gives initial movement
 	}
 	
 	public boolean isCollision(PlatformLevel level, GameContainer gc)
@@ -150,13 +150,12 @@ public class Character {
 		int xPos = (int)(x+width/2)/30; //divided by tile size
 		int yPos = (int)(y+height)/30;
 		
-		System.out.println(xPos + " , " + yPos);
+		//System.out.println(xPos + " , " + yPos);
 		
 		//simplified checker
 		if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
 		{
-			System.out.println("barrier");
-			//isOnTile = true;
+			System.out.println("is on floor");
 			return true;
 		}
 		return false;

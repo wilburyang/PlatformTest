@@ -6,6 +6,7 @@ public class TestPlatformer extends StateBasedGame {
 	public static final int MAINMENUSTATE		= 0;
 	public static final int GAMEPLAYSTATE		= 1;
 	public static final int LEVELEDITORSTATE	= 2;
+	public static int FPS = 60;
 	
 	public TestPlatformer()
 	{
@@ -17,6 +18,7 @@ public class TestPlatformer extends StateBasedGame {
          AppGameContainer app = new AppGameContainer(new TestPlatformer());
  
          app.setDisplayMode(800, 600, false);
+         app.setTargetFrameRate(FPS);
          app.start();
     }
 	
