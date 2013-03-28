@@ -1,6 +1,6 @@
 //import org.newdawn.slick.*;
 
-public class World extends TestPlatformer {
+public class World {
 	//make gravity method
 	//int floorpos;
 	double gCount; //acceleration with time
@@ -11,7 +11,7 @@ public class World extends TestPlatformer {
 		gCount = 0.0;
 	}
 	
-	public void gravity(Character ch, int change) //consider moving to main gameplay class
+	/*public void gravity(Character ch, int change) //consider moving to main gameplay class
 	{
 		
 		if(!isOnGround(ch)) //if not on ground, then jumping
@@ -31,15 +31,20 @@ public class World extends TestPlatformer {
 	
 	public boolean isOnGround(Character ch)
 	{
-		if(ch.isOnTile)
+		if(ch.isOnFloor(lvl1, gc)) //checks neutral collision
 		{
+			if(ch.ySpeed < 0)
+			{
+				ch.y += ch.speed;
+			}
 			return true;
+			
 		}
 		else
 		{
 			return false;
 		}
-	}
+	}*/
 	
 	/*public void floor (Character ch) //floor barrier
 	{

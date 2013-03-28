@@ -1,6 +1,5 @@
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
-import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.tiled.*;
 
 public class GameplayState extends BasicGameState {
@@ -39,13 +38,13 @@ public class GameplayState extends BasicGameState {
  
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
     {
-    	//gc.setMinimumLogicUpdateInterval(10);
     	Input input = gc.getInput();
+    	//gc.setMinimumLogicUpdateInterval(10);
 		
 		if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
 		{
 			//add horizontal accel in air
-			player1.x += player1.speed*delta;
+			player1.x += player1.xSpeed*delta;
 			if(player1.isCollision(lvl1, gc)) //check for each input
 			{
 				//change speed or position based on input dir
@@ -53,7 +52,7 @@ public class GameplayState extends BasicGameState {
 		}
 		if(input.isKeyDown(Input.KEY_A))
 		{
-			player1.x -= player1.speed*delta;
+			player1.x -= player1.xSpeed*delta;
 			if(player1.isCollision(lvl1, gc))
 			{
 				
@@ -62,7 +61,7 @@ public class GameplayState extends BasicGameState {
 		
 		if(input.isKeyDown(Input.KEY_W)) //jump command
 		{
-			if(world.isOnGround(player1))
+			if(player1.isOnFloor(lvl1, gc))
 			{
 				player1.jump();
 				if(player1.isCollision(lvl1, gc))
@@ -71,10 +70,10 @@ public class GameplayState extends BasicGameState {
 				}
 			}
 		}
-		else
+		/*else
 		{
 			player1.ySpeed -= player1.speed*3; //negate jump if w is released
-		}
+		}*/
 		
 		if(input.isKeyDown(Input.KEY_O)) //option menu
 		{
@@ -82,14 +81,21 @@ public class GameplayState extends BasicGameState {
 		}
 		
 		//will be array of all objects
-		world.gravity(player1, delta);
+		gravity(player1, delta, gc);
 		//collision check after gravity is floor check since only y decreases
-		if(player1.isCollision(lvl1, gc)) //checks neutral collision
+		/*if(player1.isOnFloor(lvl1, gc)) //checks neutral collision
 		{
-			player1.y -= 30;
+			if(player1.ySpeed < 0)
+			{
+				player1.y += player1.ySpeed;
+			}
 			player1.isOnTile = true;
 			
 		}
+		else
+		{
+			player1.isOnTile = false;
+		}*/
 		
 		//world.floor(player1); //makes sure player is on ground, not needed
 		world.wall(player1);
@@ -137,4 +143,35 @@ public class GameplayState extends BasicGameState {
 	{
 		
 	}*/
+    
+    public void gravity(Character ch, int change, GameContainer gc) //consider moving to main gameplay class
+    {
+    	
+    	if(!ch.isOnFloor(lvl1, gc)) //if not on ground, then jumping
+    	{
+    		//ch.ySpeed += ch.ySpeed*3;
+    		ch.gCount += 0.035; //increments gravity counter when in air
+    		
+    		ch.ySpeed -= ch.gCount; //negative acceleration
+    		//ch.y -= ch.ySpeed;
+    	}
+    	else //if on the ground
+    	{
+    		ch.gCount = 0;
+    		ch.ySpeed = 0;
+    	}
+    }
+
+    /*public boolean isOnGround(Character ch, GameContainer gc)
+    {
+    	if(ch.isOnFloor(lvl1, gc)) //checks neutral collision
+    	{
+    		return true;
+    		
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }*/
 }

@@ -19,9 +19,10 @@ public class Character {
 	
 	boolean isOnGround;*/
 	
-	float speed;
+	float xSpeed;
 	float ySpeed;
 	float scale;
+	double gCount;
 	
 	boolean fallen; //checks if fallen off map
 	
@@ -32,8 +33,8 @@ public class Character {
 		//isOnGround = true;
 		
 		scale = 1.0f;
-		speed = 0.2f;
-		ySpeed = speed; //adjusts for jumps
+		xSpeed = 0.2f;
+		ySpeed = 0.4f; //adjusts for jumps
 		
 		//isOnTile = true;
 		
@@ -57,7 +58,8 @@ public class Character {
 	//jump method, make smooth
 	public void jump()
 	{
-		y -= speed; //gives initial movement
+		System.out.println("jumping");
+		y -= 20; //gives initial movement
 	}
 	
 	public boolean isCollision(PlatformLevel level, GameContainer gc)
@@ -65,10 +67,10 @@ public class Character {
 		//Input input = gc.getInput();
 		
 		//temp floor:
-		if(y+height>=600)
+		/*if(y+height>=600)
 		{
 			y = 600-height;
-		}
+		}*/
 		
 		//check if any of character is touching barrier
 		int xPos = (int)x/30; //divided by tile size
@@ -132,5 +134,31 @@ public class Character {
 				y = object.y+object.height;
 			}
 		}*/
+	}
+	
+	public boolean isOnFloor(PlatformLevel level, GameContainer gc)
+	{
+		//Input input = gc.getInput();
+		
+		//temp floor:
+		if(y+height>=600)
+		{
+			y = 600-height;
+		}
+		
+		//check if any of character is touching barrier
+		int xPos = (int)(x+width/2)/30; //divided by tile size
+		int yPos = (int)(y+height)/30;
+		
+		System.out.println(xPos + " , " + yPos);
+		
+		//simplified checker
+		if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
+		{
+			System.out.println("barrier");
+			//isOnTile = true;
+			return true;
+		}
+		return false;
 	}
 }
