@@ -57,8 +57,8 @@ public class Character {
 	public void jump(int change)
 	{
 		System.out.println("jumping");
-		ySpeed += 0.5;
-		y -= ySpeed;
+		ySpeed = 5f; //initial velocity
+		//y -= ySpeed;
 		//y -= 100; //gives initial movement
 	}
 	
@@ -155,7 +155,7 @@ public class Character {
 		//simplified checker
 		if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
 		{
-			System.out.println("is on floor");
+			//System.out.println("is on floor");
 			return true;
 		}
 		return false;

@@ -71,6 +71,10 @@ public class GameplayState extends BasicGameState {
 		{
 			sbg.enterState(TestPlatformer.LEVELEDITORSTATE);
 		}
+		if(input.isKeyDown(Input.KEY_P)) //pause menu
+		{
+			sbg.enterState(TestPlatformer.PAUSESTATE);
+		}
 		
 		//will be array of all objects
 		gravity(player1, delta, gc);
@@ -97,21 +101,39 @@ public class GameplayState extends BasicGameState {
     	{
     		System.out.println("gravity is applied");
     		//ch.ySpeed += ch.ySpeed*3;
-    		ch.gCount += 0.035; //increments gravity counter when in air
+    		ch.gCount -= 0.15; //increments gravity counter when in air
     		
-    		ch.ySpeed -= ch.gCount; //negative acceleration
+    		if(ch.gCount < -7) //terminal velocity emulation
+    		{
+    			ch.gCount = -10;
+    		}
+    		
+    		ch.y -= ch.gCount; //negative acceleration
+    		//allows that character falls smoothly when w is not held:
+    		ch.ySpeed -= 0.2; //decreases velocity up unless jump key is held
     	}
-    	else //if on the ground
+    	/*else //if on the ground
     	{	
-    		ch.gCount = 0;
-    		ch.ySpeed = 0;
+    		
+    		ch.gCount = 0; //reset gravity
+    		ch.ySpeed = 0; //reset jump
+    	}*/
+    	
+    	//***consider adjusting one time to top of block instead
+		//checks if on or below the floor after gravity, and adjusts:
+    	if(ch.isOnFloor(lvl1, gc))
+    	{
+    		System.out.println("is on floor");
+    		ch.gCount = 0; //reset gravity counter
+    		ch.ySpeed = 0; //reset speed counter
+    		while(ch.isOnFloor(lvl1,  gc)) //if below floor, move up until not
+    		{
+    			ch.y--; //checks by pixel
+    			//System.out.println("is below floor");
+    		}
+    		ch.y++;
     	}
     	
-    	//consider adjusting one time to top of block instead
-    	while(ch.isOnFloor(lvl1,  gc)) //if below floor, move up until not
-		{
-			ch.y--; //checks by pixel
-		}
-		ch.y++;
+		System.out.println("y velocity = " + (ch.ySpeed+ch.gCount));
     }
 }
