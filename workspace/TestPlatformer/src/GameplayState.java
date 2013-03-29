@@ -44,27 +44,18 @@ public class GameplayState extends BasicGameState {
 		{
 			//add horizontal accel in air
 			player1.x += player1.xSpeed*delta;
-			if(player1.isCollision(lvl1, gc)) //check for each input
-			{
-				//change speed or position based on input dir
-			}
+			player1.checkCollision(lvl1, gc, "right"); //check for each input
 		}
 		if(input.isKeyDown(Input.KEY_A))
 		{
 			player1.x -= player1.xSpeed*delta;
-			if(player1.isCollision(lvl1, gc))
-			{
-				
-			}
+			player1.checkCollision(lvl1, gc, "left");
 		}
 		
 		if(input.isKeyDown(Input.KEY_W)) //jump command
 		{
 			player1.jump(delta);
-			if(player1.isCollision(lvl1, gc))
-			{
-					
-			}
+			player1.checkCollision(lvl1, gc, "up");
 		}
 		
 		if(input.isKeyDown(Input.KEY_O)) //option menu
@@ -101,16 +92,16 @@ public class GameplayState extends BasicGameState {
     	{
     		System.out.println("gravity is applied");
     		//ch.ySpeed += ch.ySpeed*3;
-    		ch.gCount -= 0.15; //increments gravity counter when in air
+    		ch.gCount -= 0.2; //increments gravity counter when in air
     		
-    		if(ch.gCount < -7) //terminal velocity emulation
+    		/*if(ch.gCount < -10) //terminal velocity emulation
     		{
     			ch.gCount = -10;
-    		}
+    		}*/
     		
     		ch.y -= ch.gCount; //negative acceleration
     		//allows that character falls smoothly when w is not held:
-    		ch.ySpeed -= 0.2; //decreases velocity up unless jump key is held
+    		ch.ySpeed -= 0.5; //decreases velocity up unless jump key is held
     	}
     	/*else //if on the ground
     	{	

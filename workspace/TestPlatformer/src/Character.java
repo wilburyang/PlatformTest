@@ -57,9 +57,68 @@ public class Character {
 	public void jump(int change)
 	{
 		System.out.println("jumping");
-		ySpeed = 5f; //initial velocity
+		ySpeed = 7; //initial velocity
 		//y -= ySpeed;
 		//y -= 100; //gives initial movement
+	}
+	
+	public void reverse(String direction) //push back
+	{
+		if(direction.equals("left"))
+		{
+			y += xSpeed;
+		}
+		else if(direction.equals("right"))
+		{
+			y -= xSpeed;
+		}
+	}
+	
+	public void checkCollision(PlatformLevel level, GameContainer gc, String direction)
+	{
+		if(direction.equals("right"))
+		{
+			int xPos = (int)(x+width)/30; //divided by tile size
+			int yPos = (int)(y+height/2)/30;
+			
+			System.out.println(xPos + " , " + yPos);
+			
+			//simplified checker
+			if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
+			{
+				x--;
+				checkCollision(level, gc, "right");
+			}
+		}
+		else if(direction.equals("left"))
+		{
+			int xPos = (int)x/30; //divided by tile size
+			int yPos = (int)(y+height/2)/30;
+			
+			System.out.println(xPos + " , " + yPos);
+			
+			//simplified checker
+			if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
+			{
+				x++;
+				checkCollision(level, gc, "left");
+			}
+		}
+		else if(direction.equals("up"))
+		{
+			int xPos = (int)(x+width/2)/30; //divided by tile size
+			int yPos = (int)y/30;
+			
+			System.out.println(xPos + " , " + yPos);
+			
+			//simplified checker
+			if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
+			{
+				y++;
+				checkCollision(level, gc, "up");
+				ySpeed = 0;
+			}
+		}
 	}
 	
 	public boolean isCollision(PlatformLevel level, GameContainer gc)
