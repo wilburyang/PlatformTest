@@ -9,6 +9,8 @@ public class GameplayState extends BasicGameState {
 	World world = null;
 	PlatformLevel lvl1 = null;
 	Character player1 = null;
+	Camera cam = null;
+	int camCenter;
 	
 	//TiledMap map;
 	
@@ -29,6 +31,9 @@ public class GameplayState extends BasicGameState {
     	//map = new TiledMap("data/TestTileMap.tmx","data");
     	
     	world = new World(); //creates new set of world parameters
+    	cam = new Camera();
+    	camCenter = 400; //temp value to be changed
+    	
 		lvl1 =  new PlatformLevel(); //create new level object
 		lvl1.loadBackground("data/testbackground.png",
 				"data/testfloor.png", "data/floor_tile.png");
@@ -73,6 +78,8 @@ public class GameplayState extends BasicGameState {
 		
 		//world.floor(player1); //makes sure player is on ground, not needed
 		world.wall(player1); //keeps from moving to left of screen
+		
+		cam.xCamShift(lvl1, player1, camCenter);
     }
 	
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
@@ -80,9 +87,9 @@ public class GameplayState extends BasicGameState {
     	//g.drawString("Hello World", 100, 100);
     	
     	//just draw when needed?
-    	lvl1.drawLevel(); //draws Background
+    	lvl1.drawLevel(cam.xShift); //draws Background
     	//map.render(0, 0, 0, 0, 800, 600); //test render of tilemap
-    	player1.drawCharacter();
+    	player1.drawCharacter(cam.xShift);
     }
     
     public void gravity(Character ch, int change, GameContainer gc) //consider moving to main gameplay class

@@ -14,8 +14,13 @@ public class PlatformLevel {
 	TiledMap tilefloor;
 	boolean[][] barrier; //array for barrier grid
 	
+	int x;
+	int y;
+	
 	PlatformLevel()
 	{
+		x = 0;
+		y = 0;
 	}
 	
 	public void loadBackground(String file1, String file2, String file3) throws SlickException
@@ -73,16 +78,11 @@ public class PlatformLevel {
 		 }
 	}
 	
-	public void drawLevel()
+	public void drawLevel(int xShift)
 	{
 		background.draw(0, 0);
 		//floor.draw(0, 400);
 		
-		tilefloor.render(0,0,0,0,800,600);
-		
-		/*for(int i=0; i<21; i++)
-		{
-			tileMap[i].draw(); //temp draw one tile
-		}*/
+		tilefloor.render(x-xShift, y, 0, 0, 800, 600);
 	}
 }

@@ -48,9 +48,9 @@ public class Character {
 		y = 400 - height;
 	}
 	
-	public void drawCharacter()
+	public void drawCharacter(int xShift)
 	{
-		characterImage.draw(x, y, scale);
+		characterImage.draw(x-xShift, y, scale);
 	}
 	
 	//jump method, make smooth
