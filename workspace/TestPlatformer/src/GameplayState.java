@@ -10,7 +10,7 @@ public class GameplayState extends BasicGameState {
 	PlatformLevel lvl1 = null;
 	Character player1 = null;
 	Camera cam = null;
-	int camCenter;
+	int camLine;
 	
 	//TiledMap map;
 	
@@ -32,20 +32,25 @@ public class GameplayState extends BasicGameState {
     	
     	world = new World(); //creates new set of world parameters
     	cam = new Camera();
-    	camCenter = 400; //temp value to be changed
+    	camLine = 400; //where camera begins to move
     	
 		lvl1 =  new PlatformLevel(); //create new level object
 		lvl1.loadBackground("data/testbackground.png",
 				"data/testfloor.png", "data/floor_tile.png");
 		lvl1.loadTiles("data/testfloormap.tmx");
+		lvl1.loadNPC();
 		
 		player1 = new Character();
 		player1.loadCharacterImage("data/testplayer.png");
+		player1.x = 0;
+		player1.y = 400 - player1.height;
     }
  
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
     {
     	Input input = gc.getInput();
+    	
+    	gc.setMaximumLogicUpdateInterval(17); //consistent logic rate
 		
 		if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
 		{
@@ -64,22 +69,21 @@ public class GameplayState extends BasicGameState {
 			player1.jump(delta);
 		}
 		
-		if(input.isKeyDown(Input.KEY_O)) //option menu
-		{
-			sbg.enterState(TestPlatformer.LEVELEDITORSTATE);
-		}
 		if(input.isKeyDown(Input.KEY_P)) //pause menu
 		{
 			sbg.enterState(TestPlatformer.PAUSESTATE);
 		}
 		
+		lvl1.updateNPC();
 		//will be array of all objects
-		gravity(player1, delta, gc);
+		gravity(player1, gc);
+		gravity(lvl1.testNPC, gc); //to check whole array
 		
 		//world.floor(player1); //makes sure player is on ground, not needed
-		world.wall(player1); //keeps from moving to left of screen
+		world.wall(player1); //keeps from moving off left of screen
+		world.wall(lvl1.testNPC);
 		
-		cam.xCamShift(lvl1, player1, camCenter);
+		cam.xCamShift(lvl1, player1, camLine);
     }
 	
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
@@ -92,7 +96,7 @@ public class GameplayState extends BasicGameState {
     	player1.drawCharacter(cam.xShift);
     }
     
-    public void gravity(Character ch, int change, GameContainer gc) //consider moving to main gameplay class
+    public void gravity(Character ch, GameContainer gc) //can re-add delta if needed
     {
     	ch.y -= ch.ySpeed; //move character based on previous speed adjustments
     	

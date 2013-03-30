@@ -5,7 +5,7 @@ public class TestPlatformer extends StateBasedGame {
 
 	public static final int MAINMENUSTATE		= 0;
 	public static final int GAMEPLAYSTATE		= 1;
-	public static final int LEVELEDITORSTATE	= 2; //to be options menu
+	public static final int OPTIONSMENUSTATE	= 2; //to be options menu
 	public static final int PAUSESTATE			= 3;
 	
 	public static int FPS = 60;
@@ -27,7 +27,7 @@ public class TestPlatformer extends StateBasedGame {
 	@Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
         this.addState(new MainMenuState(MAINMENUSTATE));
-        this.addState(new LevelEditor(LEVELEDITORSTATE));
+        this.addState(new OptionsMenuState(OPTIONSMENUSTATE));
         this.addState(new PauseState(PAUSESTATE));
         this.addState(new GameplayState(GAMEPLAYSTATE));
     }

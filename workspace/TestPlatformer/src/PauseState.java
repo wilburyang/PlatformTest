@@ -22,7 +22,7 @@ public class PauseState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
 	{
-		pauseText = "paused";
+		pauseText = "paused (press ESC to play)";
 		System.out.println("paused");
 	}
 	

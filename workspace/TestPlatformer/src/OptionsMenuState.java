@@ -1,11 +1,12 @@
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
+import java.io.*;
 
-public class MainMenuState extends BasicGameState {
+public class OptionsMenuState extends BasicGameState {
  
     int stateID = -1;
  
-    MainMenuState( int stateID ) 
+    OptionsMenuState( int stateID ) 
     {
        this.stateID = stateID;
     }
@@ -24,22 +25,16 @@ public class MainMenuState extends BasicGameState {
     {
     	Input input = gc.getInput();
 		
-		if(input.isKeyDown(Input.KEY_ENTER)) //normal movement on ground
+		if(input.isKeyDown(Input.KEY_ESCAPE)) //normal movement on ground
 		{
-			sbg.enterState(TestPlatformer.GAMEPLAYSTATE);
-		}
-		if(input.isKeyDown(Input.KEY_O)) //option menu
-		{
-			sbg.enterState(TestPlatformer.OPTIONSMENUSTATE);
+			sbg.enterState(TestPlatformer.MAINMENUSTATE);
 		}
     }
     
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
     {
-    	String text1 = "Press Enter to start";
-    	String text2 = "or press O for options menu";
+    	String text1 = "Press ESC to return to main menu";
     	g.drawString(text1, 280, 300);
-    	g.drawString(text2, 280, 320);
 
     }
  

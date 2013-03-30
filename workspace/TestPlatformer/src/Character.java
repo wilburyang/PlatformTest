@@ -34,6 +34,9 @@ public class Character {
 		xSpeed = 0.2f;
 		ySpeed = 0.4f; //adjusts for jumps
 		
+		x = 0; //safe guard, changed immediately
+		y = 0;
+		
 		//isOnTile = true;
 		
 		fallen = false;
@@ -41,16 +44,25 @@ public class Character {
 	
 	public void loadCharacterImage(String file) throws SlickException
 	{
+		//will make an array of all animation images
 		characterImage = new Image(file);
 		width = (int) (characterImage.getWidth()*scale);
 		height = (int) (characterImage.getHeight()*scale); //must occur at start
-		x = 0; //initial position
-		y = 400 - height;
 	}
 	
 	public void drawCharacter(int xShift)
 	{
 		characterImage.draw(x-xShift, y, scale);
+	}
+	
+	public void animateLeft()
+	{
+		
+	}
+	
+	public void animateRight()
+	{
+		
 	}
 	
 	//jump method, make smooth
@@ -60,7 +72,7 @@ public class Character {
 		ySpeed = 7; //initial velocity
 	}
 	
-	public void reverse(String direction) //push back
+	/*public void reverse(String direction) //push back
 	{
 		if(direction.equals("left"))
 		{
@@ -70,7 +82,7 @@ public class Character {
 		{
 			y -= xSpeed;
 		}
-	}
+	}*/
 	
 	public boolean checkCollision(PlatformLevel level, GameContainer gc, String direction)
 	{

@@ -3,9 +3,8 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 import org.newdawn.slick.tiled.TiledMap;
 
-//work with tmx files TiledMap --not needed
-public class LevelEditor extends BasicGameState {
-	
+public class LevelEditor {
+	/*
 	EditorObject bg = null;
 	EditorObject button[] = null;
 	float scale = 1.0f;
@@ -81,6 +80,6 @@ public class LevelEditor extends BasicGameState {
 		{
 			button[i].drawObject(g);
 		}
-	}
+	}*/
 }
 

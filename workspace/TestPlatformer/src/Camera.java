@@ -1,15 +1,15 @@
 
 public class Camera {
 
-	int cameraX;
-	int cameraY;
+	//int cameraX;
+	//int cameraY;
 	
 	int xShift;
 	
 	Camera()
 	{
-		cameraX = 0;
-		cameraY = 0;
+		//cameraX = 0;
+		//cameraY = 0;
 		xShift = 0;
 	}
 	
@@ -21,7 +21,10 @@ public class Camera {
 		}
 		if(player.x > xLine)
 		{
-			xShift = (int)player.x - xLine;
+			if(player.x-xShift > xLine || player.x-xShift < 800-xLine)
+			{
+				xShift = (int)player.x - xLine;
+			}
 		}
 	}
 }
