@@ -58,8 +58,6 @@ public class Character {
 	{
 		System.out.println("jumping");
 		ySpeed = 7; //initial velocity
-		//y -= ySpeed;
-		//y -= 100; //gives initial movement
 	}
 	
 	public void reverse(String direction) //push back
@@ -74,54 +72,67 @@ public class Character {
 		}
 	}
 	
-	public void checkCollision(PlatformLevel level, GameContainer gc, String direction)
+	public boolean checkCollision(PlatformLevel level, GameContainer gc, String direction)
 	{
-		if(direction.equals("right"))
+		if(direction.equals("right")) //check right collision
 		{
-			int xPos = (int)(x+width)/30; //divided by tile size
-			int yPos = (int)(y+height/2)/30;
+			int xPos = (int)(x+width-1)/30; //divided by tile size
+			int yPosA = (int)(y)/30; //top
+			int yPosB = (int)(y+height/2)/30; //middle
+			int yPosC = (int)(y+height-1)/30; //bottom, but not floor
 			
-			System.out.println(xPos + " , " + yPos);
+			//System.out.println(xPos + " , " + yPos);
 			
 			//simplified checker
-			if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
+			if(level.barrier[xPos][yPosA]
+					|| level.barrier[xPos][yPosB]
+					|| level.barrier[xPos][yPosC]) //checks with boxes tile dimensions
 			{
 				x--;
 				checkCollision(level, gc, "right");
 			}
 		}
-		else if(direction.equals("left"))
+		else if(direction.equals("left")) //check left collision
 		{
-			int xPos = (int)x/30; //divided by tile size
-			int yPos = (int)(y+height/2)/30;
+			int xPos = (int)(x+1)/30; //divided by tile size
+			int yPosA = (int)(y+1)/30;
+			int yPosB = (int)(y+height/2)/30;
+			int yPosC = (int)(y+height-1)/30;
 			
-			System.out.println(xPos + " , " + yPos);
+			//System.out.println(xPos + " , " + yPos);
 			
 			//simplified checker
-			if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
+			if(level.barrier[xPos][yPosA]
+					|| level.barrier[xPos][yPosB]
+					|| level.barrier[xPos][yPosC]) //checks with boxes tile dimensions
 			{
 				x++;
 				checkCollision(level, gc, "left");
 			}
 		}
-		else if(direction.equals("up"))
+		else if(direction.equals("up")) //check top collision
 		{
-			int xPos = (int)(x+width/2)/30; //divided by tile size
+			int xPosA = (int)(x+1)/30; //divided by tile size
+			int xPosB = (int)(x+width/2)/30; //checks middle of ch, left, and right
+			int xPosC = (int)(x+width-1)/30;
 			int yPos = (int)y/30;
 			
-			System.out.println(xPos + " , " + yPos);
+			//System.out.println(xPos + " , " + yPos);
 			
-			//simplified checker
-			if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
+			//simplified checker for top collision
+			if(level.barrier[xPosA][yPos]
+					|| level.barrier[xPosB][yPos]
+					|| level.barrier[xPosC][yPos]) //checks with boxes tile dimensions
 			{
 				y++;
 				checkCollision(level, gc, "up");
-				ySpeed = 0;
+				return true;
 			}
 		}
+		return false; //only returns true if collision from above
 	}
 	
-	public boolean isCollision(PlatformLevel level, GameContainer gc)
+	/*public boolean isCollision(PlatformLevel level, GameContainer gc)
 	{
 		//Input input = gc.getInput();
 		
@@ -129,7 +140,7 @@ public class Character {
 		/*if(y+height>=600)
 		{
 			y = 600-height;
-		}*/
+		}
 		
 		//check if any of character is touching barrier
 		int xPos = (int)x/30; //divided by tile size
@@ -192,8 +203,8 @@ public class Character {
 			{
 				y = object.y+object.height;
 			}
-		}*/
-	}
+		}
+	}*/
 	
 	public boolean isOnFloor(PlatformLevel level, GameContainer gc)
 	{
@@ -206,13 +217,17 @@ public class Character {
 		}
 		
 		//check if any of character is touching barrier
-		int xPos = (int)(x+width/2)/30; //divided by tile size
+		int xPosA = (int)(x+1)/30; //divided by tile size
+		int xPosB = (int)(x+width/2)/30; //check middle
+		int xPosC = (int)(x+width-1)/30; //check right
 		int yPos = (int)(y+height)/30;
 		
 		//System.out.println(xPos + " , " + yPos);
 		
 		//simplified checker
-		if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
+		if(level.barrier[xPosA][yPos]
+				|| level.barrier[xPosB][yPos]
+				|| level.barrier[xPosC][yPos]) //checks with boxes tile dimensions
 		{
 			//System.out.println("is on floor");
 			return true;

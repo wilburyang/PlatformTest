@@ -4,6 +4,8 @@ import org.newdawn.slick.tiled.*;
 
 public class GameplayState extends BasicGameState {
 
+	//*****NOTE: change all "30" to variable = tile width
+	
 	World world = null;
 	PlatformLevel lvl1 = null;
 	Character player1 = null;
@@ -55,7 +57,6 @@ public class GameplayState extends BasicGameState {
 		if(input.isKeyDown(Input.KEY_W)) //jump command
 		{
 			player1.jump(delta);
-			player1.checkCollision(lvl1, gc, "up");
 		}
 		
 		if(input.isKeyDown(Input.KEY_O)) //option menu
@@ -102,6 +103,13 @@ public class GameplayState extends BasicGameState {
     		ch.y -= ch.gCount; //negative acceleration
     		//allows that character falls smoothly when w is not held:
     		ch.ySpeed -= 0.5; //decreases velocity up unless jump key is held
+    		
+    		//check for head collision a second time:
+    		
+    		if(player1.checkCollision(lvl1, gc, "up")) //push player down if head bumps
+			{
+				player1.gCount--;
+			}
     	}
     	/*else //if on the ground
     	{	

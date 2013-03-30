@@ -22,7 +22,8 @@ public class PauseState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
 	{
-		pauseText = "pause";
+		pauseText = "paused";
+		System.out.println("paused");
 	}
 	
 	@Override
@@ -32,7 +33,7 @@ public class PauseState extends BasicGameState {
 		
 		if(input.isKeyDown(Input.KEY_ESCAPE))
 		{
-			sbg.enterState(TestPlatformer.GAMEPLAYSTATE);
+				sbg.enterState(TestPlatformer.GAMEPLAYSTATE);
 		}
 		
 		if(input.isKeyDown(Input.KEY_D))
@@ -62,7 +63,7 @@ public class PauseState extends BasicGameState {
 	
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
 	{
-		g.drawString(pauseText, 700, 0);
+		g.drawString(pauseText, 360, 290);
 	}
 }
 

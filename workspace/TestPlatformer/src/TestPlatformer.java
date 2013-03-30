@@ -28,7 +28,7 @@ public class TestPlatformer extends StateBasedGame {
     public void initStatesList(GameContainer gameContainer) throws SlickException {
         this.addState(new MainMenuState(MAINMENUSTATE));
         this.addState(new LevelEditor(LEVELEDITORSTATE));
-        this.addState(new GameplayState(PAUSESTATE));
+        this.addState(new PauseState(PAUSESTATE));
         this.addState(new GameplayState(GAMEPLAYSTATE));
     }
 }
