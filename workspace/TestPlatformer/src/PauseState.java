@@ -23,13 +23,14 @@ public class PauseState extends BasicGameState {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
 	{
 		pauseText = "paused (press ESC to play)";
-		System.out.println("paused");
 	}
 	
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
 	{
 		Input input = gc.getInput();
+		
+		System.out.println("paused");
 		
 		if(input.isKeyDown(Input.KEY_ESCAPE))
 		{

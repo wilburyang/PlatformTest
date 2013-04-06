@@ -4,7 +4,7 @@ import org.newdawn.slick.tiled.*;
 public class Character {
 
 	Image characterImage = null;
-	int life;
+	protected int life;
 	int height;
 	int width;
 	float x;
@@ -143,89 +143,17 @@ public class Character {
 		}
 		return false; //only returns true if collision from above
 	}
-	
-	/*public boolean isCollision(PlatformLevel level, GameContainer gc)
-	{
-		//Input input = gc.getInput();
-		
-		//temp floor:
-		/*if(y+height>=600)
-		{
-			y = 600-height;
-		}
-		
-		//check if any of character is touching barrier
-		int xPos = (int)x/30; //divided by tile size
-		int yPos = (int)y/30;
-		
-		System.out.println(xPos + " , " + yPos);
-		
-		//simplified checker
-		if(level.barrier[xPos][yPos]) //checks with boxes tile dimensions
-		{
-			System.out.println("barrier!");
-			return true;
-		}
-		return false;
-		
-		/*for(int xAxis=(int)(x/30); xAxis<Math.floor((x+width)/30);xAxis++)
-		{
-			for(int yAxis=(int)(y/30); yAxis<(Math.floor(y+height)/30);yAxis++)
-			{
-				if(barriers[xAxis][yAxis]) //checks with boxes tile dimensions
-				{
-					System.out.println("barrier!");
-					speed = 0;
-					ySpeed = 0;
-				}
-			}
-		}*/
-		
-		
-		
-		//old:
-		/*if(x+width > object.x && x < object.x+object.width
-				&& y+height >= object.y && y+height < object.y+object.height)//staying on ground
-		{
-			y = object.y-height;
-			isOnTile = true;
-		}
-		else
-		{
-			isOnTile = false;
-		}
-		if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
-		{
-			if(x+width > object.x && x < object.x+object.width
-					&& y > object.y+object.height && y < object.y) //check x axis collision
-			{
-				x = object.x-width;
-			}
-		}
-		if(input.isKeyDown(Input.KEY_A)) //normal movement on ground
-		{
-			if(x+width > object.x && x < object.x+object.width && y+height > object.y && y+height < object.y+object.height) //check x axis collision
-			{
-				x = object.x+object.width;
-			}
-		}
-		if(input.isKeyDown(Input.KEY_W)) //normal movement on ground
-		{
-			if(x+width > object.x && x < object.x+object.width && y+height > object.y && y < object.y+object.height) //check x axis collision
-			{
-				y = object.y+object.height;
-			}
-		}
-	}*/
+
 	
 	public boolean isOnFloor(PlatformLevel level, GameContainer gc)
 	{
 		//Input input = gc.getInput();
 		
-		//temp floor:
+		//temp floor , will initiate death method:
 		if(y+height>=600)
 		{
 			y = 600-height;
+			return true; //false floor to prevent collision check
 		}
 		
 		//check if any of character is touching barrier
@@ -245,5 +173,33 @@ public class Character {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean alive() //return true if player has 1 or more lives
+	{
+		if(life > 0)
+		{
+			return true;
+		}
+		return false;
+	}
+	public void lifeUp(int amount)
+	{
+		life += amount;
+	}
+	public void lifeUp() //increment life by one
+	{
+		life++;
+		System.out.println("life = " + life);
+	}
+	
+	public void lifeDown(int amount)
+	{
+		life -= amount;
+	}
+	public void lifeDown()
+	{
+		life--;
+		System.out.println("life = " + life);
 	}
 }

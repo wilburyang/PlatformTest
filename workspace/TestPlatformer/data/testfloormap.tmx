@@ -15,9 +15,26 @@
   </properties>
   <image source="brick_tile.png" width="30" height="30"/>
  </tileset>
+ <tileset firstgid="860" name="cow-npc" tilewidth="30" tileheight="25">
+  <properties>
+   <property name="npc" value="true"/>
+  </properties>
+  <image source="testnpc.png" width="30" height="25"/>
+  <tile id="0">
+   <properties>
+    <property name="npc" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="floor" width="100" height="20">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+2VQQ6AIAwESXym//+H8UYUCgXqrmQn6cnQwizBlIQQgpfzQO/g39z+8ur9ZvURbXJPT8+WR28WyqPOqrtf6ivKWE51b9ficS3vcfS43i2P1v8LdS602+jZnr5IFwx3HT2fCXQeu71/syB9WLOj3y6G/L3/55nK+0fPiti312dt/Yivr86Fdj2bycha5YHdv/LgKuXBVcqDq5THuy6Y/0UhQB8AAA==
   </data>
  </layer>
+ <layer name="cow-layer" width="100" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3WQQ0AMAwCwCazOf86pmBv2uZOAYEPVQAAM92TTgAAMMfvO6U+lS+3U5ddu+TYQp8ZegeAjAdRGv31QB8AAA==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="100" height="20"/>
 </map>

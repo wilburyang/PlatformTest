@@ -3,12 +3,12 @@
 public class World {
 	//make gravity method
 	//int floorpos;
-	double gCount; //acceleration with time
+	//double gCount; //acceleration with time
 	
 	World()
 	{
 		//floorpos = 400;
-		gCount = 0.0;
+		//gCount = 0.0;
 	}
 	
 	/*public void gravity(Character ch, int change) //consider moving to main gameplay class
@@ -56,7 +56,7 @@ public class World {
 			}
 			ch.ySpeed = ch.speed; //reset acceleration
 		}
-	}*/
+	}
 	
 	public void wall(Character ch) //wall barrier
 	{
@@ -64,5 +64,5 @@ public class World {
 		{
 			ch.x = 0;
 		}
-	}
+	}*/
 }

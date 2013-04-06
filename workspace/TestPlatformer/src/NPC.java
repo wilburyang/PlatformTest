@@ -4,19 +4,52 @@ public class NPC extends Character {
 
 	//can put npc place holder tiles in tmx with tiled editor,
 	//then check tile ids and load npcs at those locations
+	
+	float pRange; //range of proximity checker 
+	String ID; //selects which methods to apply based on ID of npc
+	
 	NPC(float xInit, float yInit)
 	{
-		life = 1;
+		life = 1; //default npc health
 		
 		//temporary:
 		x = xInit;
 		y = yInit;
 		xSpeed = 0.4f;
+		
+		pRange = 50;
 	}
 	
-	public void moveNPC(boolean[][] barriers)
+	public void setID(String id)
 	{
+		ID = id;
+	}
+	
+	public void moveNPC(boolean[][] barriers, Character ch, int end)
+	{
+		if(proximityCheck(ch).equals("left"))
+		{
+			if(xSpeed > 0) //if moving right turn left
+			{
+				xSpeed *= -1;
+			}
+		}
+		else if(proximityCheck(ch).equals("right"))
+		{
+			if(xSpeed < 0) //if moving left turn right
+			{
+				xSpeed *= -1;
+			}
+		}
+		
 		x += xSpeed;
+		
+		if(x+width > end-30) //makes sure character does not go off edge
+		{
+			x = end-width-30; //temp, will be wall at end
+			xSpeed *= -1;
+		}
+		
 		if(xSpeed >= 0 && checkCollision(barriers, "right") == "right") //if it bumps into right, go left
 		{
 			System.out.println("right bump");
@@ -30,6 +63,24 @@ public class NPC extends Character {
 		{
 			xSpeed *= -1;
 		}
+	}
+	
+	private String proximityCheck(Character ch) //checks if player is near npc and returns which side
+	{
+		if((ch.y+(ch.height/2)) > y-pRange && (ch.y+(ch.height/2)) < y+height) //checks y axis proximity
+		{
+			if((ch.x+(ch.width/2)) < x && (ch.x+(ch.width/2)) > x-pRange) //if player is close and to the left
+			{
+				System.out.println("------close left------");
+				return "left";
+			}
+			if((ch.x+(ch.width/2)) > x+width && (ch.x+(ch.width/2)) < x+width+pRange) //if player is close and to the right
+			{
+				System.out.println("------close right------");
+				return "right";
+			}
+		}
+		return "none";
 	}
 	
 	public void triggerNPC()
@@ -56,6 +107,11 @@ public class NPC extends Character {
 				checkCollision(barriers, "right");
 				return "right";
 			}
+			
+			if(!barriers[xPos+1][yPosA+1]) //if there is no block on floor directly to right (edge)
+			{
+				return "right"; //turn left
+			}
 		}
 		if(direction.equals("left")) //check left collision
 		{
@@ -74,6 +130,11 @@ public class NPC extends Character {
 				x++;
 				checkCollision(barriers, "left");
 				return "left";
+			}
+			
+			if(!barriers[xPos][yPosA+1]) //if there is no block on floor directly to left (edge)
+			{
+				return "left"; //turn right
 			}
 		}
 		if(direction.equals("up")) //check top collision

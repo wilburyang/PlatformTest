@@ -52,36 +52,45 @@ public class GameplayState extends BasicGameState {
     	
     	gc.setMaximumLogicUpdateInterval(17); //consistent logic rate
 		
-		if(input.isKeyDown(Input.KEY_D)) //normal movement on ground
+		if (player1.alive()) //only move player if still alive
 		{
-			//add horizontal accel in air
-			player1.x += player1.xSpeed*delta;
-			player1.checkCollision(lvl1, gc, "right"); //check for each input
+			if (input.isKeyDown(Input.KEY_D)) //normal movement on ground
+			{
+				//add horizontal acceleration in air
+				player1.x += player1.xSpeed * delta;
+				player1.checkCollision(lvl1, gc, "right"); //check for each input
+			}
+			if (input.isKeyDown(Input.KEY_A)) {
+				player1.x -= player1.xSpeed * delta;
+				player1.checkCollision(lvl1, gc, "left");
+			}
+			if (input.isKeyDown(Input.KEY_W)) //jump command
+			{
+				player1.jump(delta);
+			}
 		}
-		if(input.isKeyDown(Input.KEY_A))
-		{
-			player1.x -= player1.xSpeed*delta;
-			player1.checkCollision(lvl1, gc, "left");
-		}
-		
-		if(input.isKeyDown(Input.KEY_W)) //jump command
-		{
-			player1.jump(delta);
-		}
-		
 		if(input.isKeyDown(Input.KEY_P)) //pause menu
 		{
 			sbg.enterState(TestPlatformer.PAUSESTATE);
 		}
 		
-		lvl1.updateNPC();
-		//will be array of all objects
-		gravity(player1, gc);
-		gravity(lvl1.testNPC, gc); //to check whole array
+		lvl1.updateNPC(player1);
+		//will be arrays of all objects
 		
-		//world.floor(player1); //makes sure player is on ground, not needed
-		world.wall(player1); //keeps from moving off left of screen
-		world.wall(lvl1.testNPC);
+		if(player1.alive()) //only move player if still alive
+		{
+			gravity(player1, gc);
+			wall(player1, lvl1); //keeps from moving off left of screen
+		}
+		
+		//gravity(lvl1.testNPC, gc);
+		//world.wall(lvl1.testNPC);
+		
+		for(int i = 0; i < lvl1.allNPC.size(); i++)
+		{
+			gravity(lvl1.allNPC.get(i), gc);
+			//wall(lvl1.allNPC.get(1));
+		}
 		
 		cam.xCamShift(lvl1, player1, camLine);
     }
@@ -117,9 +126,9 @@ public class GameplayState extends BasicGameState {
     		
     		//check for head collision a second time:
     		
-    		if(player1.checkCollision(lvl1, gc, "up")) //push player down if head bumps
+    		if(ch.checkCollision(lvl1, gc, "up")) //push player down if head bumps
 			{
-				player1.gCount--;
+				ch.gCount--;
 			}
     	}
     	/*else //if on the ground
@@ -146,4 +155,12 @@ public class GameplayState extends BasicGameState {
     	
 		System.out.println("y velocity = " + (ch.ySpeed+ch.gCount));
     }
+    
+    public void wall(Character ch, PlatformLevel lvl) //wall barrier
+	{
+		if(ch.x < 0)
+		{
+			ch.x = 0;
+		}
+	}
 }
