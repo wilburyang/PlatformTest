@@ -35,7 +35,10 @@ public class PlatformLevel {
 		background = new Image(file1); //loads background image
 		
 		//temp:
-		//floor = new Image(file2); // temporary floor image load
+		//floor = new Image(file2); // temporary
+		
+		
+		//floor image load
 		/*tileMap = new Tile[100];
 		for(int i=0; i<tileMap.length; i++)
 		{
@@ -73,7 +76,7 @@ public class PlatformLevel {
 	{
 		//temporary:
 		testNPC = new NPC(600, 300);
-		testNPC.loadCharacterImage("data/testnpc.png");
+		testNPC.loadCharacterImage("data/testnpc", ".png", 3);
 		
 		//counts number of npcs for level's npc array size
 		int amount = 0;
@@ -108,7 +111,7 @@ public class PlatformLevel {
 					allNPC.add(new NPC(xAxis*30, yAxis*30));
 					
 					//temporary load, to be copying
-					allNPC.get(npcIndex).loadCharacterImage("data/testnpc.png");
+					allNPC.get(npcIndex).loadCharacterImage("data/testnpc", ".png", 3);
 					
 					System.out.println(xAxis*30 + " , " + yAxis*30);
 					
@@ -153,5 +156,10 @@ public class PlatformLevel {
 		{
 			allNPC.get(i).drawCharacter(xShift);
 		}
+	}
+	public void playTrack(String name){
+		String filename = "data/" + name + ".wav";
+		Thread track = new Thread(new PlayTrack(filename));
+		track.start();
 	}
 }

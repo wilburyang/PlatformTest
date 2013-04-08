@@ -39,9 +39,10 @@ public class GameplayState extends BasicGameState {
 				"data/testfloor.png", "data/floor_tile.png");
 		lvl1.loadTiles("data/testfloormap.tmx");
 		lvl1.loadNPC();
+		lvl1.playTrack("lvl1track");
 		
 		player1 = new Character();
-		player1.loadCharacterImage("data/testplayer.png");
+		player1.loadCharacterImage("data/testplayer", ".png", 3);
 		player1.x = 0;
 		player1.y = 400 - player1.height;
     }

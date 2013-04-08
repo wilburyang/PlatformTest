@@ -85,7 +85,10 @@ public class NPC extends Character {
 	
 	public void triggerNPC()
 	{
-		
+		/*AePlayWave moo = new AePlayWave("data/testnpcsound.wav");
+		moo.run();*/
+		Thread moo = new Thread(new PlaySound("data/testnpcsound.wav"));
+		moo.start();
 	}
 	
 	//overrides regular character check method

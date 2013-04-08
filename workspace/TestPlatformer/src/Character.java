@@ -3,7 +3,10 @@ import org.newdawn.slick.tiled.*;
 
 public class Character {
 
-	Image characterImage = null;
+	Image image[] = null;
+	int totalFrames;
+	int currentFrame;
+	
 	protected int life;
 	int height;
 	int width;
@@ -37,30 +40,50 @@ public class Character {
 		x = 0; //safe guard, changed immediately
 		y = 0;
 		
+		currentFrame = 0;
 		//isOnTile = true;
 		
 		fallen = false;
 	}
 	
-	public void loadCharacterImage(String file) throws SlickException
+	public void loadCharacterImage(String fileName, String extension, int total) throws SlickException
 	{
-		//will make an array of all animation images
-		characterImage = new Image(file);
-		width = (int) (characterImage.getWidth()*scale);
-		height = (int) (characterImage.getHeight()*scale); //must occur at start
+		totalFrames = total;
+		image = new Image[totalFrames];
+		
+		for(int frame = 0; frame < totalFrames; frame++) //load each frame to image array
+		{
+			try
+			{
+				image[frame] = new Image(fileName + frame + extension);
+			} catch (SlickException e) {
+				System.err.println("Image file not found: " + fileName+frame+extension);
+				return;
+			}
+		}
+		
+		width = (int) (image[0].getWidth()*scale);
+		height = (int) (image[0].getHeight()*scale); //must occur at start
 	}
+	
+	/*public void loadCharacterImage(String file, int total) throws SlickException
+	{	
+		image = new Image(file);
+		width = (int) (image.getWidth()*scale);
+		height = (int) (image.getHeight()*scale); //must occur at start
+	}*/
 	
 	public void drawCharacter(int xShift)
 	{
-		characterImage.draw(x-xShift, y, scale);
+		image[currentFrame].draw(x-xShift, y, scale);
 	}
 	
-	public void animateLeft()
+	public void animateLeft() //changes current frame based on counter
 	{
 		
 	}
 	
-	public void animateRight()
+	public void animateRight() //changes current frame based on counter
 	{
 		
 	}
