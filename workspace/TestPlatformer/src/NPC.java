@@ -44,6 +44,15 @@ public class NPC extends Character {
 		
 		x += xSpeed;
 		
+		if(xSpeed < 0)
+		{
+			animateLeft(); //if moving left, animate left
+		}
+		else if (xSpeed > 0)
+		{
+			animateRight();
+		}
+		
 		if(x+width > end-30) //makes sure character does not go off edge
 		{
 			x = end-width-30; //temp, will be wall at end

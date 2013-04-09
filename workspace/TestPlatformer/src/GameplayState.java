@@ -42,7 +42,7 @@ public class GameplayState extends BasicGameState {
 		lvl1.playTrack("lvl1track");
 		
 		player1 = new Character();
-		player1.loadCharacterImage("data/testplayer", ".png", 3);
+		player1.loadImage("data/testplayer", ".png", 3);
 		player1.x = 0;
 		player1.y = 400 - player1.height;
     }
@@ -60,10 +60,14 @@ public class GameplayState extends BasicGameState {
 				//add horizontal acceleration in air
 				player1.x += player1.xSpeed * delta;
 				player1.checkCollision(lvl1, gc, "right"); //check for each input
+				
+				player1.animateRight();
 			}
 			if (input.isKeyDown(Input.KEY_A)) {
 				player1.x -= player1.xSpeed * delta;
 				player1.checkCollision(lvl1, gc, "left");
+				
+				player1.animateLeft();
 			}
 			if (input.isKeyDown(Input.KEY_W)) //jump command
 			{
@@ -103,7 +107,7 @@ public class GameplayState extends BasicGameState {
     	//just draw when needed?
     	lvl1.drawLevel(cam.xShift); //draws Background
     	//map.render(0, 0, 0, 0, 800, 600); //test render of tilemap
-    	player1.drawCharacter(cam.xShift);
+    	player1.draw(cam.xShift);
     }
     
     public void gravity(Character ch, GameContainer gc) //can re-add delta if needed

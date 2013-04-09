@@ -76,7 +76,7 @@ public class PlatformLevel {
 	{
 		//temporary:
 		testNPC = new NPC(600, 300);
-		testNPC.loadCharacterImage("data/testnpc", ".png", 3);
+		testNPC.loadImage("data/testnpc", ".png", 3);
 		
 		//counts number of npcs for level's npc array size
 		int amount = 0;
@@ -111,7 +111,7 @@ public class PlatformLevel {
 					allNPC.add(new NPC(xAxis*30, yAxis*30));
 					
 					//temporary load, to be copying
-					allNPC.get(npcIndex).loadCharacterImage("data/testnpc", ".png", 3);
+					allNPC.get(npcIndex).loadImage("data/testnpc", ".png", 3);
 					
 					System.out.println(xAxis*30 + " , " + yAxis*30);
 					
@@ -154,7 +154,7 @@ public class PlatformLevel {
 		//***NOTE: Optimize to only render npcs onscreen
 		for(int i = 0; i < allNPC.size(); i++) //draws all npcs in array
 		{
-			allNPC.get(i).drawCharacter(xShift);
+			allNPC.get(i).draw(xShift);
 		}
 	}
 	public void playTrack(String name){

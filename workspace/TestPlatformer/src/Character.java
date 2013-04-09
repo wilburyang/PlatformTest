@@ -1,13 +1,17 @@
 import org.newdawn.slick.*;
-import org.newdawn.slick.tiled.*;
 
 public class Character {
 
 	Image image[] = null;
 	int totalFrames;
-	int currentFrame;
+	int currentAnimation;
 	int fDuration; //amount of time frames remain
-	Animation animation = null;
+	Animation animation[] = null;
+	
+	private final int NORMAL =		0;
+	private final int LEFT =		1;
+	private final int RIGHT =		2;
+	private final int JUMP =		3;
 	
 	protected int life;
 	int height;
@@ -42,14 +46,14 @@ public class Character {
 		x = 0; //safe guard, changed immediately
 		y = 0;
 		
-		currentFrame = 0;
+		currentAnimation = 0;
 		fDuration = 200; //ms?
 		//isOnTile = true;
 		
 		fallen = false;
 	}
 	
-	public void loadCharacterImage(String fileName, String extension, int total) throws SlickException
+	public void loadImage(String fileName, String extension, int total) throws SlickException
 	{
 		totalFrames = total;
 		image = new Image[totalFrames];
@@ -68,7 +72,12 @@ public class Character {
 		width = (int) (image[0].getWidth()*scale);
 		height = (int) (image[0].getHeight()*scale); //must occur at start
 		
-		animation = new Animation(image, fDuration);
+		animation = new Animation[3];
+		
+		for(int i = 1; i < 3; i++)
+		{
+			animation[i] = new Animation(image, fDuration); //will be different sub sections of image array
+		}
 	}
 	
 	/*public void loadCharacterImage(String file, int total) throws SlickException
@@ -78,26 +87,27 @@ public class Character {
 		height = (int) (image.getHeight()*scale); //must occur at start
 	}*/
 	
-	public void drawCharacter(int xShift)
+	public void draw(int xShift)
 	{
-		if(animateLeft())
+		if(currentAnimation != NORMAL) //if still, draw still instead of zeroeth animation
 		{
-			animation.draw(x-xShift, y);
+			animation[currentAnimation].draw(x-xShift, y);
 		}
 		else
 		{
-			image[currentFrame].draw(x-xShift, y, scale);
+			image[0].draw(x-xShift, y, scale);
 		}
+		currentAnimation = NORMAL; //reset to check again
 	}
 	
-	public boolean animateLeft() //changes current frame based on counter
+	public void animateLeft() //changes current frame based on duration
 	{
-		return true;
+		currentAnimation = LEFT;
 	}
 	
-	public void animateRight() //changes current frame based on counter
+	public void animateRight() //changes current frame based on duration
 	{
-		
+		currentAnimation = RIGHT;
 	}
 	
 	//jump method, make smooth
