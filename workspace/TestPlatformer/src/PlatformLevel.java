@@ -1,8 +1,12 @@
-//import java.io.*;
+import java.io.*;
 import java.util.*;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.openal.*;
 import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.util.ResourceLoader;
+
+//TODO http://lwjgl.org/wiki/index.php?title=Slick-Util_Library_-_Part_2_-_Loading_Sounds_for_LWJGL
 
 public class PlatformLevel {
 
@@ -21,13 +25,18 @@ public class PlatformLevel {
 	TiledMap tilefloor;
 	boolean[][] barrier; //array for barrier grid
 	
+	private Audio levelMusic; //wav file for level bg music stream
+	
 	int x;
 	int y;
 	
-	PlatformLevel()
+	int level;
+	
+	PlatformLevel(int levelNum) //level number to be used for what is selected
 	{
 		x = 0;
 		y = 0;
+		level = levelNum;
 	}
 	
 	public void loadBackground(String file) throws SlickException
@@ -44,6 +53,15 @@ public class PlatformLevel {
 		{
 			tileMap[i] = new Tile();
 		}*/
+	}
+	
+	public void loadMusic(String file) throws SlickException
+	{
+		try {
+			levelMusic = AudioLoader.getAudio("WAV", ResourceLoader.getResourceAsStream(file));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void loadTiles(String file) throws SlickException
@@ -123,6 +141,17 @@ public class PlatformLevel {
 				}
 	    	}
 		}
+	}
+	
+	public void playMusic()
+	{
+		//TODO change to playasmusic and fix to play, move from init
+		levelMusic.playAsSoundEffect(1.0f, 1.0f, true);
+		//levelMusic.playAsMusic(1.0f, 1.0f, true);
+		
+		// polling is required to allow streaming to get a chance to
+		// queue buffers.
+		//SoundStore.get().poll(0);
 	}
 	
 	public void updateNPC(Character ch) //will move all npcs

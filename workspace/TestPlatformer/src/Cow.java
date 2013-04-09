@@ -1,6 +1,8 @@
 //flamethrowing cow class
 //describes unique trigger behavior for flamethrowing cow
 
+//TODO Will contain unique image, behavior, and sound effects
+
 public class Cow extends NPC {
 
 	Cow(float xInit, float yInit)
