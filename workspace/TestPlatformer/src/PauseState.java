@@ -64,7 +64,7 @@ public class PauseState extends BasicGameState {
 	
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
 	{
-		g.drawString(pauseText, 360, 290);
+		g.drawString(pauseText, 300, 290);
 	}
 }
 

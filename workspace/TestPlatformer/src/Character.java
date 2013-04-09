@@ -114,7 +114,10 @@ public class Character {
 	public void jump(int change)
 	{
 		System.out.println("jumping");
-		ySpeed = 7; //initial velocity
+		if(ySpeed >= 0) //if falling, cannot jump
+		{
+			ySpeed = 7; //initial velocity
+		}
 	}
 	
 	/*public void reverse(String direction) //push back

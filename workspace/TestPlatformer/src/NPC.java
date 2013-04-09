@@ -1,4 +1,9 @@
+import java.io.IOException;
+
 import org.newdawn.slick.*;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.AudioLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class NPC extends Character {
 
@@ -6,6 +11,10 @@ public class NPC extends Character {
 	//then check tile ids and load npcs at those locations
 	
 	float pRange; //range of proximity checker 
+	
+	String soundFile = null;
+	Audio soundEffect;
+	
 	String ID; //selects which methods to apply based on ID of npc
 	
 	NPC(float xInit, float yInit)
@@ -27,6 +36,7 @@ public class NPC extends Character {
 	
 	public void moveNPC(boolean[][] barriers, Character ch, int end)
 	{
+		playSoundEffect(ch.x); //temp sound test
 		if(proximityCheck(ch).equals("left"))
 		{
 			if(xSpeed > 0) //if moving right turn left
@@ -53,7 +63,7 @@ public class NPC extends Character {
 			animateRight();
 		}
 		
-		if(x+width > end-30) //makes sure character does not go off edge
+		if(x+width > end-30) //makes sure npc does not go off edge
 		{
 			x = end-width-30; //temp, will be wall at end
 			xSpeed *= -1;
@@ -81,11 +91,13 @@ public class NPC extends Character {
 			if((ch.x+(ch.width/2)) < x && (ch.x+(ch.width/2)) > x-pRange) //if player is close and to the left
 			{
 				System.out.println("------close left------");
+				//playSoundEffect(ch.x); //temp sound test
 				return "left";
 			}
 			if((ch.x+(ch.width/2)) > x+width && (ch.x+(ch.width/2)) < x+width+pRange) //if player is close and to the right
 			{
 				System.out.println("------close right------");
+				//playSoundEffect(ch.x); //temp sound test
 				return "right";
 			}
 		}
@@ -95,9 +107,38 @@ public class NPC extends Character {
 	public void triggerNPC()
 	{
 		/*AePlayWave moo = new AePlayWave("data/testnpcsound.wav");
-		moo.run();*/
+		moo.run();
 		Thread moo = new Thread(new PlaySound("data/testnpcsound.wav"));
-		moo.start();
+		moo.start();*/
+	}
+	public void loadSoundEffect()
+	{
+		try {
+			soundEffect = AudioLoader.getAudio("WAV",
+				ResourceLoader.getResourceAsStream(soundFile));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void playSoundEffect(float playerPos)
+	{
+		//TODO adjust to play on interval with volume proportional to distance from player
+		double volumeScale = (1/(playerPos-x)); //large when closer to cow
+		
+		if(volumeScale < 0)
+		{
+			volumeScale *= -1;
+		}
+		if(volumeScale > 1.0)
+		{
+			volumeScale = 1.0;
+		}
+		
+		if(!soundEffect.isPlaying())
+		{
+			//play in position and at volume relative to player position:
+			soundEffect.playAsSoundEffect(1.0f, (float) volumeScale*10.0f, false);
+		}
 	}
 	
 	//overrides regular character check method

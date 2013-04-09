@@ -1,4 +1,5 @@
 import org.newdawn.slick.*;
+import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.state.*;
 import org.newdawn.slick.tiled.*;
 
@@ -36,7 +37,7 @@ public class GameplayState extends BasicGameState {
     	
 		lvl1 =  new PlatformLevel(1); //create new level object
 		lvl1.loadBackground("data/testbackground.png");
-		lvl1.loadMusic("data/lvl1track.wav");
+		lvl1.loadSound("data/lvl1track.wav");
 		lvl1.loadTiles("data/testfloormap.tmx");
 		lvl1.loadNPC();
 		//lvl1.playTrack("lvl1track");
@@ -45,8 +46,6 @@ public class GameplayState extends BasicGameState {
 		player1.loadImage("data/testplayer", ".png", 3);
 		player1.x = 0;
 		player1.y = 400 - player1.height;
-		
-		lvl1.playMusic(); //TODO move to update and make music stream
     }
  
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
@@ -55,10 +54,12 @@ public class GameplayState extends BasicGameState {
     	
     	gc.setMaximumLogicUpdateInterval(17); //consistent logic rate
 		
-
+    	//Sound:
+    	lvl1.playMusic();
     	
+    	SoundStore.get().poll(0); //may not be needed
     	
-		if (player1.alive()) //only move player if still alive, otherwise death animation
+		if (player1.alive()) //onlyd move player if still alive, otherwise death animation
 		{
 			if (input.isKeyDown(Input.KEY_D)) //normal movement on ground
 			{

@@ -16,6 +16,8 @@ public class Cow extends NPC {
 		xSpeed = 0.4f;
 		
 		pRange = 50;
+		
+		soundFile = "data/testnpcsound.wav";
 	}
 
 	public void triggerNPC()

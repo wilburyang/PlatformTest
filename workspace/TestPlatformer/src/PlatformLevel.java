@@ -15,12 +15,7 @@ public class PlatformLevel {
 	
 	Image background = null;
 	NPC testNPC = null; //to be all images needed (in arrays for animations)
-	ArrayList<NPC> allNPC;
-	//Image floor = null; //temporary floor image
-	
-	//Image block = null;
-	//Tile tileMap[] = null; //needs to be array
-	
+	ArrayList<Cow> allNPC; //temporarily cow class specifically
 	
 	TiledMap tilefloor;
 	boolean[][] barrier; //array for barrier grid
@@ -54,8 +49,8 @@ public class PlatformLevel {
 			tileMap[i] = new Tile();
 		}*/
 	}
-	
-	public void loadMusic(String file) throws SlickException
+	//eventually will not take a file string
+	public void loadSound(String file) throws SlickException //loads level effects and level music
 	{
 		try {
 			levelMusic = AudioLoader.getAudio("WAV", ResourceLoader.getResourceAsStream(file));
@@ -96,7 +91,7 @@ public class PlatformLevel {
 		testNPC = new NPC(600, 300);
 		testNPC.loadImage("data/testnpc", ".png", 3);
 		
-		//counts number of npcs for level's npc array size
+		/*counts number of npcs for level's npc array size
 		int amount = 0;
 		for (int xAxis=0;xAxis<tilefloor.getWidth(); xAxis++)
 		{
@@ -110,13 +105,11 @@ public class PlatformLevel {
 					amount++;
 				}
 	    	}
-		}
-		//System.out.println("-------------" + amount);
+		}*/
 		
-		//*****NOTE: change to list format!!!
 		//creates npc array based on tmx npc layer
 		int npcIndex = 0;
-		allNPC = new ArrayList<NPC>();
+		allNPC = new ArrayList<Cow>(); //temporarily cow class specifically
 		
 		for (int xAxis=0;xAxis<tilefloor.getWidth(); xAxis++)
 		{
@@ -126,7 +119,7 @@ public class PlatformLevel {
 				
 				if(tileID > 0) //temp force draw cow
 				{
-					allNPC.add(new NPC(xAxis*30, yAxis*30));
+					allNPC.add(new Cow(xAxis*30, yAxis*30)); //temporarily cow class specifically
 					
 					//temporary load, to be copying
 					allNPC.get(npcIndex).loadImage("data/testnpc", ".png", 3);
@@ -141,14 +134,22 @@ public class PlatformLevel {
 				}
 	    	}
 		}
+		
+		//loads audio fx for npcs:
+		for (int i = 0; i < allNPC.size(); i++) {
+			allNPC.get(i).loadSoundEffect();
+		}
 	}
 	
 	public void playMusic()
 	{
 		//TODO change to playasmusic and fix to play, move from init
-		levelMusic.playAsSoundEffect(1.0f, 1.0f, true);
-		//levelMusic.playAsMusic(1.0f, 1.0f, true);
+		//levelMusic.playAsSoundEffect(1.0f, 1.0f, true);
 		
+		if(!levelMusic.isPlaying()) //checks if already playing music
+    	{
+			levelMusic.playAsMusic(1.0f, 1.0f, true);
+    	}
 		// polling is required to allow streaming to get a chance to
 		// queue buffers.
 		//SoundStore.get().poll(0);
