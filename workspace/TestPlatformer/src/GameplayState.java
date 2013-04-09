@@ -35,11 +35,10 @@ public class GameplayState extends BasicGameState {
     	camLine = 400; //where camera begins to move
     	
 		lvl1 =  new PlatformLevel(); //create new level object
-		lvl1.loadBackground("data/testbackground.png",
-				"data/testfloor.png", "data/floor_tile.png");
+		lvl1.loadBackground("data/testbackground.png");
 		lvl1.loadTiles("data/testfloormap.tmx");
 		lvl1.loadNPC();
-		lvl1.playTrack("lvl1track");
+		//lvl1.playTrack("lvl1track");
 		
 		player1 = new Character();
 		player1.loadImage("data/testplayer", ".png", 3);
@@ -108,6 +107,8 @@ public class GameplayState extends BasicGameState {
     	lvl1.drawLevel(cam.xShift); //draws Background
     	//map.render(0, 0, 0, 0, 800, 600); //test render of tilemap
     	player1.draw(cam.xShift);
+    	
+    	g.drawString("Life: " + player1.getLife(), 725, 10);
     }
     
     public void gravity(Character ch, GameContainer gc) //can re-add delta if needed

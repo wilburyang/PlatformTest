@@ -30,9 +30,9 @@ public class PlatformLevel {
 		y = 0;
 	}
 	
-	public void loadBackground(String file1, String file2, String file3) throws SlickException
+	public void loadBackground(String file) throws SlickException
 	{
-		background = new Image(file1); //loads background image
+		background = new Image(file); //loads background image
 		
 		//temp:
 		//floor = new Image(file2); // temporary

@@ -3,9 +3,9 @@ import org.newdawn.slick.*;
 public class Character {
 
 	Image image[] = null;
-	int totalFrames;
-	int currentAnimation;
-	int fDuration; //amount of time frames remain
+	int totalFrames; //may not be needed
+	private int currentAnimation;
+	private int fDuration; //amount of time frames remain
 	Animation animation[] = null;
 	
 	private final int NORMAL =		0;
@@ -195,9 +195,9 @@ public class Character {
 		//Input input = gc.getInput();
 		
 		//temp floor , will initiate death method:
-		if(y+height>=600)
+		if(y+height>=600) //falls to for
 		{
-			y = 600-height;
+			die();
 			return true; //false floor to prevent collision check
 		}
 		
@@ -228,6 +228,27 @@ public class Character {
 		}
 		return false;
 	}
+	public void die() //when character loses life, reset position and state
+	{
+		lifeDown();
+		
+		if(life > 0)
+		{
+			x = 0;
+			y = 400 - height;
+		}
+		else //full death, will initiate death animation
+		{
+			x = 0;
+			y = 400 - height;
+			lifeUp(3); //reset to full life (temp)
+		}
+	}
+	public int getLife()
+	{
+		return life;
+	}
+	
 	public void lifeUp(int amount)
 	{
 		life += amount;

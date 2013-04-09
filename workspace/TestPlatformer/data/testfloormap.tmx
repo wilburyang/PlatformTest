@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="100" height="20" tilewidth="30" tileheight="30">
- <tileset firstgid="1" name="floor_tile.png" tilewidth="30" tileheight="30">
-  <image source="floor_tile.png" width="400" height="400"/>
- </tileset>
- <tileset firstgid="170" name="floor_tile" tilewidth="30" tileheight="30">
-  <image source="floor_tile.png" width="400" height="400"/>
- </tileset>
- <tileset firstgid="339" name="testbackground" tilewidth="30" tileheight="30">
+ <tileset firstgid="1" name="testbackground" tilewidth="30" tileheight="30">
   <image source="testbackground.png" width="800" height="600"/>
  </tileset>
- <tileset firstgid="859" name="brick_tile" tilewidth="30" tileheight="30">
+ <tileset firstgid="521" name="brick_tile" tilewidth="30" tileheight="30">
   <properties>
    <property name="barrier" value="true"/>
   </properties>
   <image source="brick_tile.png" width="30" height="30"/>
  </tileset>
- <tileset firstgid="860" name="cow-npc" tilewidth="30" tileheight="25">
+ <tileset firstgid="522" name="cow-npc" tilewidth="30" tileheight="25">
   <properties>
    <property name="npc" value="true"/>
   </properties>
@@ -28,12 +22,12 @@
  </tileset>
  <layer name="floor" width="100" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+2VQQ6AIAwESXym//+H8UYUCgXqrmQn6cnQwizBlIQQgpfzQO/g39z+8ur9ZvURbXJPT8+WR28WyqPOqrtf6ivKWE51b9ficS3vcfS43i2P1v8LdS602+jZnr5IFwx3HT2fCXQeu71/syB9WLOj3y6G/L3/55nK+0fPiti312dt/Yivr86Fdj2bycha5YHdv/LgKuXBVcqDq5THuy6Y/0UhQB8AAA==
+   H4sIAAAAAAAAA+2VQQ6AIAwEiTf//2HjjSgUCtRdyU7Sk6GFWYIpCSEEL+eB3sG/uf3l1fvN6iPa5J6eni2P3iyUR51Vd7/UV5SxnOrersXjWt7j6HG9Wx6t/xfqXGi30bM9fZEuGO46ej4T6Dx2e/9mQfqwZke/XQz5e//PM5X3j54VsW+vz9r6EV9fnQvtejaTkbXKA7t/5cFVyoOrlAdXKY93XdIgzKhAHwAA
   </data>
  </layer>
  <layer name="cow-layer" width="100" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3WQQ0AMAwCwCazOf86pmBv2uZOAYEPVQAAM92TTgAAMMfvO6U+lS+3U5ddu+TYQp8ZegeAjAdRGv31QB8AAA==
+   H4sIAAAAAAAAA+3WsQ0AMAwCsKhj/z+4F3QmiewLECxUAQDMdE86AQDAHL/vlPpUvtxOXXbtkmMLfWboHQAyHgtmLMJAHwAA
   </data>
  </layer>
  <objectgroup name="Object Layer 1" width="100" height="20"/>
