@@ -6,6 +6,8 @@ public class Character {
 	Image image[] = null;
 	int totalFrames;
 	int currentFrame;
+	int fDuration; //amount of time frames remain
+	Animation animation = null;
 	
 	protected int life;
 	int height;
@@ -41,6 +43,7 @@ public class Character {
 		y = 0;
 		
 		currentFrame = 0;
+		fDuration = 200; //ms?
 		//isOnTile = true;
 		
 		fallen = false;
@@ -64,6 +67,8 @@ public class Character {
 		
 		width = (int) (image[0].getWidth()*scale);
 		height = (int) (image[0].getHeight()*scale); //must occur at start
+		
+		animation = new Animation(image, fDuration);
 	}
 	
 	/*public void loadCharacterImage(String file, int total) throws SlickException
@@ -75,12 +80,19 @@ public class Character {
 	
 	public void drawCharacter(int xShift)
 	{
-		image[currentFrame].draw(x-xShift, y, scale);
+		if(animateLeft())
+		{
+			animation.draw(x-xShift, y);
+		}
+		else
+		{
+			image[currentFrame].draw(x-xShift, y, scale);
+		}
 	}
 	
-	public void animateLeft() //changes current frame based on counter
+	public boolean animateLeft() //changes current frame based on counter
 	{
-		
+		return true;
 	}
 	
 	public void animateRight() //changes current frame based on counter
