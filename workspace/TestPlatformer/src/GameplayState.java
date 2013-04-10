@@ -38,9 +38,8 @@ public class GameplayState extends BasicGameState {
 		lvl1 =  new PlatformLevel(1); //create new level object
 		lvl1.loadBackground("data/testbackground.png");
 		lvl1.loadSound("data/lvl1track.wav");
-		lvl1.loadTiles("data/testfloormap.tmx");
+		lvl1.loadTiles("data/testfloormap2.tmx");
 		lvl1.loadNPC();
-		//lvl1.playTrack("lvl1track");
 		
 		player1 = new Character();
 		player1.loadImage("data/testplayer", ".png", 3);
@@ -54,7 +53,7 @@ public class GameplayState extends BasicGameState {
     	
     	gc.setMaximumLogicUpdateInterval(17); //consistent logic rate
 		
-    	//Sound:
+    	//level sound:
     	lvl1.playMusic();
     	
     	SoundStore.get().poll(0); //may not be needed
@@ -108,14 +107,12 @@ public class GameplayState extends BasicGameState {
 	
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
     {
-    	//g.drawString("Hello World", 100, 100);
     	
-    	//just draw when needed?
     	lvl1.drawLevel(cam.xShift); //draws Background
     	//map.render(0, 0, 0, 0, 800, 600); //test render of tilemap
     	player1.draw(cam.xShift);
     	
-    	g.drawString("Life: " + player1.getLife(), 725, 10);
+    	g.drawString("Life: " + player1.getLife(), 725, 10); //life counter in upper right
     }
     
     public void gravity(Character ch, GameContainer gc) //can re-add delta if needed
@@ -124,14 +121,8 @@ public class GameplayState extends BasicGameState {
     	
     	if(!ch.isOnFloor(lvl1, gc)) //if not on ground, then jumping
     	{
-    		System.out.println("gravity is applied");
-    		//ch.ySpeed += ch.ySpeed*3;
+    		//System.out.println("gravity is applied");
     		ch.gCount -= 0.2; //increments gravity counter when in air
-    		
-    		/*if(ch.gCount < -10) //terminal velocity emulation
-    		{
-    			ch.gCount = -10;
-    		}*/
     		
     		ch.y -= ch.gCount; //negative acceleration
     		//allows that character falls smoothly when w is not held:
@@ -144,12 +135,6 @@ public class GameplayState extends BasicGameState {
 				ch.gCount--;
 			}
     	}
-    	/*else //if on the ground
-    	{	
-    		
-    		ch.gCount = 0; //reset gravity
-    		ch.ySpeed = 0; //reset jump
-    	}*/
     	
     	//***consider adjusting one time to top of block instead
 		//checks if on or below the floor after gravity, and adjusts:
@@ -166,7 +151,7 @@ public class GameplayState extends BasicGameState {
     		ch.y++;
     	}
     	
-		System.out.println("y velocity = " + (ch.ySpeed+ch.gCount));
+		//System.out.println("y velocity = " + (ch.ySpeed+ch.gCount));
     }
     
     public void wall(Character ch, PlatformLevel lvl) //wall barrier

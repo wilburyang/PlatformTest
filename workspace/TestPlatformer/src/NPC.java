@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Random;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.openal.Audio;
@@ -14,6 +15,9 @@ public class NPC extends Character {
 	
 	String soundFile = null;
 	Audio soundEffect;
+	Random random = new Random(); //create new random set for sound delay
+	int r = random.nextInt(9)*500; //random number taken from random
+	long startTime = System.currentTimeMillis(); //gets start time upon load
 	
 	String ID; //selects which methods to apply based on ID of npc
 	
@@ -120,6 +124,18 @@ public class NPC extends Character {
 			e.printStackTrace();
 		}
 	}
+	
+	public boolean delay(long startTime, int random){
+		System.out.println("Random Value: "+random);
+		System.out.println((System.currentTimeMillis()-startTime)%10006);
+		long p = (System.currentTimeMillis()-startTime)%10006 - (long) random;
+		if(p <= 50 && p >=0){
+			startTime = System.currentTimeMillis();
+			return true;
+		}
+		return false;
+	}
+
 	public void playSoundEffect(float playerPos)
 	{
 		//TODO adjust to play on interval with volume proportional to distance from player
@@ -129,15 +145,19 @@ public class NPC extends Character {
 		{
 			volumeScale *= -1;
 		}
-		if(volumeScale > 1.0)
+		if(volumeScale > 1)
 		{
-			volumeScale = 1.0;
+			volumeScale = 1;
 		}
 		
 		if(!soundEffect.isPlaying())
 		{
-			//play in position and at volume relative to player position:
-			soundEffect.playAsSoundEffect(1.0f, (float) volumeScale*10.0f, false);
+			if(delay(startTime, r)){
+				r = (random.nextInt(10)+8)*500;
+				soundEffect.playAsSoundEffect(1.0f, (float) volumeScale*0.75f, false);	
+				startTime = System.currentTimeMillis() + 2000;
+			}
+
 		}
 	}
 	

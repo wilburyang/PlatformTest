@@ -21,6 +21,7 @@ public class PlatformLevel {
 	boolean[][] barrier; //array for barrier grid
 	
 	private Audio levelMusic; //wav file for level bg music stream
+	float musicVolume;
 	
 	int x;
 	int y;
@@ -32,6 +33,8 @@ public class PlatformLevel {
 		x = 0;
 		y = 0;
 		level = levelNum;
+		
+		musicVolume = 0.1f; //set default music volume
 	}
 	
 	public void loadBackground(String file) throws SlickException
@@ -148,7 +151,7 @@ public class PlatformLevel {
 		
 		if(!levelMusic.isPlaying()) //checks if already playing music
     	{
-			levelMusic.playAsMusic(1.0f, 1.0f, true);
+			levelMusic.playAsMusic(1.0f, musicVolume, true);
     	}
 		// polling is required to allow streaming to get a chance to
 		// queue buffers.
@@ -186,10 +189,5 @@ public class PlatformLevel {
 		{
 			allNPC.get(i).draw(xShift);
 		}
-	}
-	public void playTrack(String name){
-		String filename = "data/" + name + ".wav";
-		Thread track = new Thread(new PlayTrack(filename));
-		track.start();
 	}
 }

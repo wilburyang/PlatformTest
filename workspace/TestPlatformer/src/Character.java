@@ -114,7 +114,7 @@ public class Character {
 	public void jump(int change)
 	{
 		System.out.println("jumping");
-		if(ySpeed >= 0) //if falling, cannot jump
+		if(ySpeed >= -1) //if falling, cannot jump
 		{
 			ySpeed = 7; //initial velocity
 		}

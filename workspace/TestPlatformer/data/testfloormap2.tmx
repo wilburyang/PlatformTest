@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="200" height="20" tilewidth="30" tileheight="30">
+ <tileset firstgid="1" name="brick_tile" tilewidth="30" tileheight="30">
+  <properties>
+   <property name="barrier" value="true"/>
+  </properties>
+  <image source="brick_tile.png" width="30" height="30"/>
+ </tileset>
+ <tileset firstgid="2" name="cow_tile" tilewidth="30" tileheight="25">
+  <image source="testnpc.png" width="30" height="25"/>
+  <tile id="0">
+   <properties>
+    <property name="npc" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="floor" width="200" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztl8kOgzAMROH/f7onVAkF4zgeL2Se1EOBON4mmOMghBBCCCHke5yDHyE7I+mBGhmDzgnPqBpocr9aH9Z6nq45k3y2zCbaZxFzj9aGdb+Rz28xZPXCm3+ZPVpZH9q6atdZ+sXqw92O9B+xr3e8p/KZ2VnRWquoM76CPu5nhVf8FfTx1CsWInpDc5Z79quXPqT6zRCpvd2RzlLpeY29aK1ofUDiqaUV3aHZQZNSjqVrGo1Y1lm4283un849T/5o3/1W29F0762OPl909n0Ecja+1hHSkZn3ufVMRs1Q5JlKs1rm/OBhw6qPjJx3npkiqVArBJo4POK0fA/u8h2JiGE1d7NrsmvlYdsaw2p82blDg4wD0aMz+lj1s1ONLflD1QWRuywb3rF65bOiPjxrXimP0fqI8Bm132pfVPDj6f7b9aycRfph6TVv21/PaxVfvHz4AbzhA34=
+  </data>
+ </layer>
+ <layer name="cow-layer" width="200" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt2IENwCAIBEDT/YfuDLUVnuZuAH2VQOJaAAAAAFS6ugMQa1JtdGf9ev+d9brvAID/ezprzCaA8/RaAAAAgDr+YmaY+k5JuZOy7Eo9Q2ouoIYeAO/ccvUAIQ==
+  </data>
+ </layer>
+</map>
