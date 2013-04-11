@@ -21,7 +21,7 @@ public class Cow extends NPC {
 		
 		soundFile = "data/testnpcsound.wav";
 		
-		loadWeapon("data/weapon/cow_fire", 3);
+		loadWeapon("data/weapon/cow_fire", 5);
 	}
 	
 	public void triggerNPC()

@@ -17,8 +17,9 @@ public class PlatformLevel {
 	NPC testNPC = null; //to be all images needed (in arrays for animations)
 	ArrayList<Cow> allNPC; //temporarily cow class specifically
 	
-	TiledMap tilefloor;
+	TiledMap tileFloor;
 	boolean[][] barrier; //array for barrier grid
+	int floorLength = 0;
 	
 	private Audio levelMusic; //wav file for level bg music stream
 	float musicVolume;
@@ -65,18 +66,20 @@ public class PlatformLevel {
 	public void loadTiles(String file) throws SlickException
 	{
 		//to be input from gamplay for level selection:
-		tilefloor = new TiledMap(file); //lvl1 test
+		tileFloor = new TiledMap(file); //lvl1 test
 		
-		//new stuff:
-		final int SIZE = 30;   
+		final int SIZE = 30; //TODO get tile size
+		
+		floorLength = tileFloor.getWidth()*30; //sets floor length in tiles
+		
 		// build a collision map based on tile properties in the TileD map 
-		barrier = new boolean[tilefloor.getWidth()][tilefloor.getHeight()];
+		barrier = new boolean[tileFloor.getWidth()][tileFloor.getHeight()];
 		
-		for (int xAxis=0;xAxis<tilefloor.getWidth(); xAxis++)
+		for (int xAxis=0;xAxis<tileFloor.getWidth(); xAxis++)
 		{
-			for (int yAxis=0;yAxis<tilefloor.getHeight(); yAxis++)
+			for (int yAxis=0;yAxis<tileFloor.getHeight(); yAxis++)
 		    {
-				int tileID = tilefloor.getTileId(xAxis, yAxis, floorLayerIndex);
+				int tileID = tileFloor.getTileId(xAxis, yAxis, floorLayerIndex);
 				System.out.println(tileID);
 		        //String value = tilefloor.getTileProperty(tileID, "barrier", "false");
 		        if (tileID > 0) //brute force check for layer
@@ -114,11 +117,11 @@ public class PlatformLevel {
 		int npcIndex = 0;
 		allNPC = new ArrayList<Cow>(); //temporarily cow class specifically
 		
-		for (int xAxis=0;xAxis<tilefloor.getWidth(); xAxis++)
+		for (int xAxis=0;xAxis<tileFloor.getWidth(); xAxis++)
 		{
-			for (int yAxis=0;yAxis<tilefloor.getHeight(); yAxis++)
+			for (int yAxis=0;yAxis<tileFloor.getHeight(); yAxis++)
 	    	{
-				int tileID = tilefloor.getTileId(xAxis, yAxis, npcLayerIndex);
+				int tileID = tileFloor.getTileId(xAxis, yAxis, npcLayerIndex);
 				
 				if(tileID > 0) //temp force draw cow
 				{
@@ -164,7 +167,7 @@ public class PlatformLevel {
 		
 		for(int i = 0; i < allNPC.size(); i++) //moves all npcs in array individually
 		{
-			allNPC.get(i).moveNPC(barrier,  ch, tilefloor.getWidth()*30);
+			allNPC.get(i).moveNPC(barrier,  ch, tileFloor.getWidth()*30);
 		}
 		
 		//death test:
@@ -180,7 +183,7 @@ public class PlatformLevel {
 	{
 		background.draw(0, 0);
 		
-		tilefloor.render(x-xShift, y, floorLayerIndex); //only render static layer (layer 0)
+		tileFloor.render(x-xShift, y, floorLayerIndex); //only render static layer (layer 0)
 		
 		//testNPC.drawCharacter(xShift);
 		

@@ -30,8 +30,6 @@ public class GameplayState extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
     {
     	//map = new TiledMap("data/TestTileMap.tmx","data");
-    	
-    	world = new World(); //creates new set of world parameters
     	cam = new Camera();
     	camLine = 400; //where camera begins to move
     	
@@ -60,6 +58,8 @@ public class GameplayState extends BasicGameState {
     	
 		if (player1.alive()) //onlyd move player if still alive, otherwise death animation
 		{
+			wall(player1, lvl1); //keeps from moving off left of screen
+			
 			if (input.isKeyDown(Input.KEY_D)) //normal movement on ground
 			{
 				//add horizontal acceleration in air
@@ -90,7 +90,6 @@ public class GameplayState extends BasicGameState {
 		if(player1.alive()) //only move player if still alive
 		{
 			gravity(player1, gc);
-			wall(player1, lvl1); //keeps from moving off left of screen
 			
 			for(int i = 0; i < lvl1.allNPC.size(); i++)
 			{
@@ -98,6 +97,27 @@ public class GameplayState extends BasicGameState {
 				{
 					player1.die();
 				}
+			}
+		}
+		
+		//Temporary movement bypass cheat:
+		if (input.isKeyDown(Input.KEY_LSHIFT)) //jump command
+		{
+			player1.y += player1.gCount;
+			player1.ySpeed = 0;
+			player1.gCount = 0;
+			
+			if(input.isKeyDown(Input.KEY_D))
+			{
+				player1.x += player1.xSpeed * delta; //doubles speed
+			}
+			if(input.isKeyDown(Input.KEY_A))
+			{
+				player1.x -= player1.xSpeed * delta;
+			}
+			if(input.isKeyDown(Input.KEY_S))
+			{
+				player1.y += player1.xSpeed * delta;
 			}
 		}
 		
@@ -121,6 +141,12 @@ public class GameplayState extends BasicGameState {
     	player1.draw(cam.xShift);
     	
     	g.drawString("Life: " + player1.getLife(), 725, 10); //life counter in upper right
+    
+    	Input input = gc.getInput();
+    	if(input.isKeyDown(Input.KEY_LSHIFT))
+    	{
+    		g.drawString("whosyourdaddy", 360, 290);
+    	}
     }
     
     public void gravity(Character ch, GameContainer gc) //can re-add delta if needed
@@ -167,6 +193,10 @@ public class GameplayState extends BasicGameState {
 		if(ch.x < 0)
 		{
 			ch.x = 0;
+		}
+		if(ch.x+ch.width > lvl.floorLength-30)
+		{
+			ch.x = lvl.floorLength - ch.width-30;
 		}
 	}
 }
