@@ -19,11 +19,18 @@ public class NPC extends Character {
 	int r = random.nextInt(9)*500; //random number taken from random
 	long startTime = System.currentTimeMillis(); //gets start time upon load
 	
-	String ID; //selects which methods to apply based on ID of npc
+	boolean isFlipped = false; //if facing right
+	
+	Weapon weapon;
+	boolean isAttacking = false;
+	
+	String type = null; //selects which methods to apply based on type of npc
 	
 	NPC(float xInit, float yInit)
 	{
 		life = 1; //default npc health
+		
+		ID = NPC;
 		
 		//temporary:
 		x = xInit;
@@ -33,14 +40,15 @@ public class NPC extends Character {
 		pRange = 50;
 	}
 	
-	public void setID(String id)
+	public void setType(String id)
 	{
-		ID = id;
+		type = new String(id);
 	}
 	
 	public void moveNPC(boolean[][] barriers, Character ch, int end)
 	{
 		playSoundEffect(ch.x); //temp sound test
+		
 		if(proximityCheck(ch).equals("left"))
 		{
 			if(xSpeed > 0) //if moving right turn left
@@ -75,7 +83,7 @@ public class NPC extends Character {
 		
 		if(xSpeed >= 0 && checkCollision(barriers, "right") == "right") //if it bumps into right, go left
 		{
-			System.out.println("right bump");
+			//System.out.println("right bump");
 			xSpeed *= -1;
 		}
 		if(xSpeed < 0 && checkCollision(barriers, "left").equals("left")) //if it bumps into left, go right
@@ -94,14 +102,20 @@ public class NPC extends Character {
 		{
 			if((ch.x+(ch.width/2)) < x && (ch.x+(ch.width/2)) > x-pRange) //if player is close and to the left
 			{
-				System.out.println("------close left------");
+				//System.out.println("------close left------");
 				//playSoundEffect(ch.x); //temp sound test
+				
 				return "left";
 			}
 			if((ch.x+(ch.width/2)) > x+width && (ch.x+(ch.width/2)) < x+width+pRange) //if player is close and to the right
 			{
-				System.out.println("------close right------");
+				//System.out.println("------close right------");
 				//playSoundEffect(ch.x); //temp sound test
+				
+				
+				attack(); //temporary test attack
+				
+				
 				return "right";
 			}
 		}
@@ -115,6 +129,56 @@ public class NPC extends Character {
 		Thread moo = new Thread(new PlaySound("data/testnpcsound.wav"));
 		moo.start();*/
 	}
+	public void attack()
+	{
+		if(!isFlipped)
+		{
+			weapon.setPosition((int)x+width, (int)y, false); //overriden by subclasses
+		}
+		else
+		{
+			weapon.setPosition((int)x-weapon.getWidth(), (int)y, true); //overriden by subclasses
+		}
+		
+		weapon.hitBox();
+		
+		isAttacking = true; //will loop attack indefinitely for now
+		System.out.println("attacking!");
+	}
+	
+	//creates weapon object, run in specific subclasses
+	public void loadWeapon(String filePrefix, int totalFrames) throws SlickException
+	{
+		weapon = new Weapon(totalFrames);
+		
+		weapon.loadAnimation(filePrefix);
+	}
+	
+	public void draw(int xShift)
+	{
+		if(currentAnimation != NORMAL) //if still, draw still instead of zeroeth animation
+		{
+			animation[currentAnimation].draw(x-xShift, y);
+		}
+		else
+		{
+			image[0].draw(x-xShift, y, scale);
+		}
+		currentAnimation = NORMAL; //reset to check again
+		
+		if(isAttacking)
+		{
+			weapon.setPosition((int)x+width,
+				(int)(y + height/2-weapon.getHeight()/2), false);
+			
+			weapon.drawActive(xShift);
+		}
+		else
+		{
+			weapon.drawInactive(xShift);
+		}
+	}
+	
 	public void loadSoundEffect()
 	{
 		try {
@@ -126,8 +190,8 @@ public class NPC extends Character {
 	}
 	
 	public boolean delay(long startTime, int random){
-		System.out.println("Random Value: "+random);
-		System.out.println((System.currentTimeMillis()-startTime)%10006);
+		//System.out.println("Random Value: "+random);
+		//System.out.println((System.currentTimeMillis()-startTime)%10006);
 		long p = (System.currentTimeMillis()-startTime)%10006 - (long) random;
 		if(p <= 50 && p >=0){
 			startTime = System.currentTimeMillis();

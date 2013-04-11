@@ -42,7 +42,7 @@ public class GameplayState extends BasicGameState {
 		lvl1.loadNPC();
 		
 		player1 = new Character();
-		player1.loadImage("data/testplayer", ".png", 3);
+		player1.loadAnimation("data/testplayer", ".png", 3);
 		player1.x = 0;
 		player1.y = 400 - player1.height;
     }
@@ -140,7 +140,7 @@ public class GameplayState extends BasicGameState {
 		//checks if on or below the floor after gravity, and adjusts:
     	if(ch.isOnFloor(lvl1, gc))
     	{
-    		System.out.println("is on floor");
+    		//System.out.println("is on floor");
     		ch.gCount = 0; //reset gravity counter
     		ch.ySpeed = 0; //reset speed counter
     		while(ch.isOnFloor(lvl1,  gc)) //if below floor, move up until not

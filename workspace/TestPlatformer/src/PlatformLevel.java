@@ -92,7 +92,7 @@ public class PlatformLevel {
 	{
 		//temporary:
 		testNPC = new NPC(600, 300);
-		testNPC.loadImage("data/testnpc", ".png", 3);
+		testNPC.loadAnimation("data/testnpc", ".png", 3);
 		
 		/*counts number of npcs for level's npc array size
 		int amount = 0;
@@ -125,13 +125,13 @@ public class PlatformLevel {
 					allNPC.add(new Cow(xAxis*30, yAxis*30)); //temporarily cow class specifically
 					
 					//temporary load, to be copying
-					allNPC.get(npcIndex).loadImage("data/testnpc", ".png", 3);
+					allNPC.get(npcIndex).loadAnimation("data/testnpc", ".png", 3);
 					
 					System.out.println(xAxis*30 + " , " + yAxis*30);
 					
 					if(tileID == 860) //temporary brute force method
 					{
-						allNPC.get(npcIndex).setID("testcow");
+						allNPC.get(npcIndex).setType("cow");
 					}
 					npcIndex++;
 				}

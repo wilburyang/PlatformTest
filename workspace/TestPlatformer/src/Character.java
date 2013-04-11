@@ -4,20 +4,25 @@ public class Character {
 
 	Image image[] = null;
 	int totalFrames; //may not be needed
-	private int currentAnimation;
+	protected int currentAnimation;
 	private int fDuration; //amount of time frames remain
 	Animation animation[] = null;
 	
-	private final int NORMAL =		0;
-	private final int LEFT =		1;
-	private final int RIGHT =		2;
-	private final int JUMP =		3;
+	protected final int NORMAL =		0;
+	protected final int LEFT =		1;
+	protected final int RIGHT =		2;
+	protected final int JUMP =		3;
 	
 	protected int life;
 	int height;
 	int width;
 	float x;
 	float y;
+	
+	int PLAYER =	0; //id number for characters
+	int NPC =		1;
+	
+	int ID; //id player or npc
 	
 	/*int direction; //testing for directional jump
 	int forward = 1;
@@ -37,6 +42,8 @@ public class Character {
 	{
 		life = 3;
 		
+		ID = PLAYER; //default, versus NPC
+		
 		//isOnGround = true;
 		
 		scale = 1.0f;
@@ -53,7 +60,22 @@ public class Character {
 		fallen = false;
 	}
 	
-	public void loadImage(String fileName, String extension, int total) throws SlickException
+	public void loadAnimation(String fileName, String extension, int total) throws SlickException
+	{
+		loadImage(fileName, extension, total);
+		
+		width = (int) (image[0].getWidth()*scale);
+		height = (int) (image[0].getHeight()*scale); //must occur at start
+		
+		animation = new Animation[3];
+		
+		for(int i = 1; i < 3; i++)
+		{
+			animation[i] = new Animation(image, fDuration); //will be different sub sections of image array
+		}
+	}
+	
+	private void loadImage(String fileName, String extension, int total) throws SlickException
 	{
 		totalFrames = total;
 		image = new Image[totalFrames];
@@ -68,18 +90,7 @@ public class Character {
 				return;
 			}
 		}
-		
-		width = (int) (image[0].getWidth()*scale);
-		height = (int) (image[0].getHeight()*scale); //must occur at start
-		
-		animation = new Animation[3];
-		
-		for(int i = 1; i < 3; i++)
-		{
-			animation[i] = new Animation(image, fDuration); //will be different sub sections of image array
-		}
 	}
-	
 	/*public void loadCharacterImage(String file, int total) throws SlickException
 	{	
 		image = new Image(file);
@@ -132,6 +143,12 @@ public class Character {
 		}
 	}*/
 	
+	public void checkHurtBox() //kills player if hit
+	{
+		
+	}
+	
+	//TODO switch to using "TOP_LEFT", etc...
 	public boolean checkCollision(PlatformLevel level, GameContainer gc, String direction)
 	{
 		if(direction.equals("right")) //check right collision
