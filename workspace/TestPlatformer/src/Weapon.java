@@ -82,6 +82,14 @@ public class Weapon {
 		}
 	}
 	
+	public float getX()
+	{
+		return (float)x;
+	}
+	public float getY()
+	{
+		return (float)y;
+	}
 	public int getWidth()
 	{
 		return animation.getWidth();
@@ -98,23 +106,11 @@ public class Weapon {
 		direction = flip;
 	}
 	
-	public boolean[][] hitBox() //edits hitBox to match current frame
+	/*public void setHitBox() //edits hitBox to match current frame
 	{
-		boolean hitBox[][] = new boolean //new dimensions for hitBox
-				[animation.getWidth()]
-				[animation.getHeight()];
-		
-		for(int xAxis = x; xAxis < x+animation.getWidth(); xAxis++)
-		{
-			for(int yAxis = y; yAxis < y+animation.getHeight(); yAxis++)
-			{
-				System.out.println(xAxis + " , " + yAxis);
-				//hitBox[xAxis][yAxis] = true;
-			}
-		}
-		
-		return hitBox;
-	}
+		corners[0][0] = 
+	}*/
+	
 	/*public void clearHitBox()
 	{
 		for(int xAxis = x; xAxis < x+animation.getWidth(); xAxis++)

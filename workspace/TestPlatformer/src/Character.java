@@ -143,9 +143,20 @@ public class Character {
 		}
 	}*/
 	
-	public void checkHurtBox() //kills player if hit
+	public boolean checkHurtBox(Weapon box) //kills player if hit
 	{
+		//TODO create hurt box in center to check (and not just point)
+		float xCenter = x+width/2;
+		float yCenter = y+height/2;
 		
+		if (yCenter >= box.getY() && yCenter <= (box.getY()+box.getHeight()))
+		{
+			if (xCenter >= box.getX() && xCenter <= (box.getX()+box.getWidth()))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	//TODO switch to using "TOP_LEFT", etc...

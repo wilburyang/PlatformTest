@@ -140,7 +140,7 @@ public class NPC extends Character {
 			weapon.setPosition((int)x-weapon.getWidth(), (int)y, true); //overriden by subclasses
 		}
 		
-		weapon.hitBox();
+		//weapon.setHitBox();
 		
 		isAttacking = true; //will loop attack indefinitely for now
 		System.out.println("attacking!");

@@ -91,6 +91,14 @@ public class GameplayState extends BasicGameState {
 		{
 			gravity(player1, gc);
 			wall(player1, lvl1); //keeps from moving off left of screen
+			
+			for(int i = 0; i < lvl1.allNPC.size(); i++)
+			{
+				if(player1.checkHurtBox(lvl1.allNPC.get(i).weapon))
+				{
+					player1.die();
+				}
+			}
 		}
 		
 		//gravity(lvl1.testNPC, gc);

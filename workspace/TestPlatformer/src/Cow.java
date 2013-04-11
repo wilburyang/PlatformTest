@@ -40,7 +40,7 @@ public class Cow extends NPC {
 			weapon.setPosition((int)x-weapon.getWidth(), (int)(y + height/2-weapon.getHeight()/2), true); //overriden by subclasses
 		}
 		
-		weapon.hitBox();
+		//weapon.setHitBox();
 		
 		isAttacking = true; //will loop attack indefinitely for now
 		System.out.println("attacking!");
