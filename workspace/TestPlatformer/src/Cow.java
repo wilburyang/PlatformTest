@@ -15,9 +15,9 @@ public class Cow extends NPC {
 		//temporary:
 		x = xInit;
 		y = yInit;
-		xSpeed = 0.4f;
+		xSpeed = 1.6f;
 		
-		pRange = 50;
+		pRange = 100;
 		
 		soundFile = "data/testnpcsound.wav";
 		

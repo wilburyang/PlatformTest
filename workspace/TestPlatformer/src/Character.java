@@ -19,6 +19,10 @@ public class Character {
 	float x;
 	float y;
 	
+	int hurtBoxX;
+	int hurtBoxY;
+	int hurtSize;
+	
 	int PLAYER =	0; //id number for characters
 	int NPC =		1;
 	
@@ -53,6 +57,10 @@ public class Character {
 		x = 0; //safe guard, changed immediately
 		y = 0;
 		
+		hurtBoxX = 0;
+		hurtBoxY = 0;
+		hurtSize = 0;
+		
 		currentAnimation = 0;
 		fDuration = 200; //ms?
 		//isOnTile = true;
@@ -66,6 +74,7 @@ public class Character {
 		
 		width = (int) (image[0].getWidth()*scale);
 		height = (int) (image[0].getHeight()*scale); //must occur at start
+		hurtSize = (int) width; //set hurtbox dimensions (square)
 		
 		animation = new Animation[3];
 		
@@ -145,15 +154,37 @@ public class Character {
 	
 	public boolean checkHurtBox(Weapon box) //kills player if hit
 	{
-		//TODO create hurt box in center to check (and not just point)
+		hurtBoxX = (int) (x+width/2 - hurtSize/2);
+		hurtBoxY = (int) (y+height/2 - hurtSize/2);
+		
+		System.out.println(hurtBoxX + " , " + box.getX() + " , " + hurtBoxY + " , " + box.getY());
+		
 		float xCenter = x+width/2;
 		float yCenter = y+height/2;
 		
-		if (yCenter >= box.getY() && yCenter <= (box.getY()+box.getHeight()))
+
+		/*if (yCenter >= box.getY() && yCenter <= (box.getY()+box.getHeight()))
 		{
 			if (xCenter >= box.getX() && xCenter <= (box.getX()+box.getWidth()))
 			{
 				return true;
+			}
+		}*/
+		
+		for(int j = hurtBoxY; j < hurtBoxY+hurtSize; j++)
+		{
+			for (int k = (int)box.getY(); k < box.getY()+box.getHeight(); k++)
+			{
+				if (j == k) {
+					for (int l = (int) hurtBoxX; l < hurtBoxX + hurtSize; l++) {
+						for (int m = (int) box.getX(); m < box.getX()+box.getWidth(); m++) {
+							if (l == m) {
+								System.out.println("hit!");
+								return true;
+							}
+						}
+					}
+				}
 			}
 		}
 		return false;

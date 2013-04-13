@@ -7,7 +7,6 @@ public class GameplayState extends BasicGameState {
 
 	//*****NOTE: change all "30" to variable = tile width
 	
-	World world = null;
 	PlatformLevel lvl1 = null;
 	Character player1 = null;
 	Camera cam = null;
