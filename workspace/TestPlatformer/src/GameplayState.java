@@ -55,7 +55,7 @@ public class GameplayState extends BasicGameState {
     	
     	SoundStore.get().poll(0); //may not be needed
     	
-		if (player1.alive()) //onlyd move player if still alive, otherwise death animation
+		if (player1.isAlive()) //onlyd move player if still alive, otherwise death animation
 		{
 			wall(player1, lvl1); //keeps from moving off left of screen
 			
@@ -86,13 +86,13 @@ public class GameplayState extends BasicGameState {
 		lvl1.updateNPC(player1);
 		//will be arrays of all objects
 		
-		if(player1.alive()) //only move player if still alive
+		if(player1.isAlive()) //only move player if still alive
 		{
 			gravity(player1, gc);
 			
 			for(int i = 0; i < lvl1.allNPC.size(); i++)
 			{
-				if(player1.checkHurtBox(lvl1.allNPC.get(i).weapon))
+				if(player1.checkHurtBox(lvl1.allNPC.get(i).npcWeapon))
 				{
 					player1.die();
 				}

@@ -26,7 +26,7 @@ public class Weapon {
 		
 		//defaults:
 		direction = false; //to right
-		duration = 100; //ms
+		duration = 200; //ms
 		delay = 2000; //ms
 	}
 	

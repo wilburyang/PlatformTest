@@ -167,7 +167,12 @@ public class PlatformLevel {
 		
 		for(int i = 0; i < allNPC.size(); i++) //moves all npcs in array individually
 		{
-			allNPC.get(i).moveNPC(barrier,  ch, tileFloor.getWidth()*30);
+			allNPC.get(i).update(barrier,  ch, tileFloor.getWidth()*30);
+			
+			if(!allNPC.get(i).isAlive()) //if npc is dead, remove from list
+			{
+				allNPC.remove(i);
+			}
 		}
 		
 		//death test:

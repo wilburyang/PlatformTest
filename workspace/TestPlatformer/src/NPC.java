@@ -21,8 +21,7 @@ public class NPC extends Character {
 	
 	boolean isFlipped = false; //if facing right
 	
-	Weapon weapon;
-	boolean isAttacking = false;
+	Weapon npcWeapon;
 	
 	String type = null; //selects which methods to apply based on type of npc
 	
@@ -45,7 +44,7 @@ public class NPC extends Character {
 		type = new String(id);
 	}
 	
-	public void moveNPC(boolean[][] barriers, Character ch, int end)
+	public void update(boolean[][] barriers, Character ch, int end)
 	{
 		playSoundEffect(ch.x); //temp sound test
 		
@@ -94,6 +93,16 @@ public class NPC extends Character {
 		{
 			xSpeed *= -1;
 		}
+		
+		//update weapon position
+		if(!isFlipped)
+		{
+			npcWeapon.setPosition((int)x+width, (int)y, false); //overriden by subclasses
+		}
+		else
+		{
+			npcWeapon.setPosition((int)x-npcWeapon.getWidth(), (int)y, true); //overriden by subclasses
+		}
 	}
 	
 	private String proximityCheck(Character ch) //checks if player is near npc and returns which side
@@ -130,18 +139,7 @@ public class NPC extends Character {
 		moo.start();*/
 	}
 	public void attack()
-	{
-		if(!isFlipped)
-		{
-			weapon.setPosition((int)x+width, (int)y, false); //overriden by subclasses
-		}
-		else
-		{
-			weapon.setPosition((int)x-weapon.getWidth(), (int)y, true); //overriden by subclasses
-		}
-		
-		//weapon.setHitBox();
-		
+	{	
 		isAttacking = true; //will loop attack indefinitely for now
 		System.out.println("attacking!");
 	}
@@ -149,9 +147,9 @@ public class NPC extends Character {
 	//creates weapon object, run in specific subclasses
 	public void loadWeapon(String filePrefix, int totalFrames) throws SlickException
 	{
-		weapon = new Weapon(totalFrames);
+		npcWeapon = new Weapon(totalFrames);
 		
-		weapon.loadAnimation(filePrefix);
+		npcWeapon.loadAnimation(filePrefix);
 	}
 	
 	public void draw(int xShift)
@@ -168,14 +166,14 @@ public class NPC extends Character {
 		
 		if(isAttacking)
 		{
-			weapon.setPosition((int)x+width,
-				(int)(y + height/2-weapon.getHeight()/2), false);
+			npcWeapon.setPosition((int)x+width,
+				(int)(y + height/2-npcWeapon.getHeight()/2), false);
 			
-			weapon.drawActive(xShift);
+			npcWeapon.drawActive(xShift);
 		}
 		else
 		{
-			weapon.drawInactive(xShift);
+			npcWeapon.drawInactive(xShift);
 		}
 	}
 	
@@ -225,73 +223,82 @@ public class NPC extends Character {
 		}
 	}
 	
+	public void die() //when character loses life, reset position and state
+	{
+		lifeDown(); //if they are dead, the npc list will remove
+	}
+	
 	//overrides regular character check method
 	public String checkCollision(boolean[][] barriers, String direction)
 	{
-		if(direction.equals("right")) //check right collision
-		{
-			int xPos = (int)(x+width-1)/30; //divided by tile size
-			int yPosA = (int)(y)/30; //top
-			int yPosB = (int)(y+height/2)/30; //middle
-			int yPosC = (int)(y+height-1)/30;
-			
-			//simplified checker
-			if(barriers[xPos][yPosA]
-					|| barriers[xPos][yPosB]
-					|| barriers[xPos][yPosC]) //checks with boxes tile dimensions
+		try {
+			if(direction.equals("right")) //check right collision
 			{
-				x--;
-				checkCollision(barriers, "right");
-				return "right";
+				int xPos = (int)(x+width-1)/30; //divided by tile size
+				int yPosA = (int)(y)/30; //top
+				int yPosB = (int)(y+height/2)/30; //middle
+				int yPosC = (int)(y+height-1)/30;
+				
+				//simplified checker
+				if(barriers[xPos][yPosA]
+						|| barriers[xPos][yPosB]
+						|| barriers[xPos][yPosC]) //checks with boxes tile dimensions
+				{
+					x--;
+					checkCollision(barriers, "right");
+					return "right";
+				}
+				
+				if(!barriers[xPos+1][yPosA+1]) //if there is no block on floor directly to right (edge)
+				{
+					return "right"; //turn left
+				}
 			}
-			
-			if(!barriers[xPos+1][yPosA+1]) //if there is no block on floor directly to right (edge)
+			if(direction.equals("left")) //check left collision
 			{
-				return "right"; //turn left
+				int xPos = (int)(x+1)/30; //divided by tile size
+				int yPosA = (int)(y+1)/30;
+				int yPosB = (int)(y+height/2)/30;
+				int yPosC = (int)(y+height-1)/30;
+				
+				//System.out.println(xPos + " , " + yPos);
+				
+				//simplified checker
+				if(barriers[xPos][yPosA]
+						|| barriers[xPos][yPosB]
+						|| barriers[xPos][yPosC]) //checks with boxes tile dimensions
+				{
+					x++;
+					checkCollision(barriers, "left");
+					return "left";
+				}
+				
+				if(!barriers[xPos][yPosA+1]) //if there is no block on floor directly to left (edge)
+				{
+					return "left"; //turn right
+				}
 			}
-		}
-		if(direction.equals("left")) //check left collision
-		{
-			int xPos = (int)(x+1)/30; //divided by tile size
-			int yPosA = (int)(y+1)/30;
-			int yPosB = (int)(y+height/2)/30;
-			int yPosC = (int)(y+height-1)/30;
-			
-			//System.out.println(xPos + " , " + yPos);
-			
-			//simplified checker
-			if(barriers[xPos][yPosA]
-					|| barriers[xPos][yPosB]
-					|| barriers[xPos][yPosC]) //checks with boxes tile dimensions
+			if(direction.equals("up")) //check top collision
 			{
-				x++;
-				checkCollision(barriers, "left");
-				return "left";
+				int xPosA = (int)(x+1)/30; //divided by tile size
+				int xPosB = (int)(x+width/2)/30; //checks middle of ch, left, and right
+				int xPosC = (int)(x+width-1)/30;
+				int yPos = (int)y/30;
+				
+				//System.out.println(xPos + " , " + yPos);
+				
+				//simplified checker for top collision
+				if(barriers[xPosA][yPos]
+						|| barriers[xPosB][yPos]
+						|| barriers[xPosC][yPos]) //checks with boxes tile dimensions
+				{
+					y++;
+					checkCollision(barriers, "up");
+					return "up";
+				}
 			}
-			
-			if(!barriers[xPos][yPosA+1]) //if there is no block on floor directly to left (edge)
-			{
-				return "left"; //turn right
-			}
-		}
-		if(direction.equals("up")) //check top collision
-		{
-			int xPosA = (int)(x+1)/30; //divided by tile size
-			int xPosB = (int)(x+width/2)/30; //checks middle of ch, left, and right
-			int xPosC = (int)(x+width-1)/30;
-			int yPos = (int)y/30;
-			
-			//System.out.println(xPos + " , " + yPos);
-			
-			//simplified checker for top collision
-			if(barriers[xPosA][yPos]
-					|| barriers[xPosB][yPos]
-					|| barriers[xPosC][yPos]) //checks with boxes tile dimensions
-			{
-				y++;
-				checkCollision(barriers, "up");
-				return "up";
-			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return "out of bounds error";
 		}
 		return "none"; //default direction
 	}

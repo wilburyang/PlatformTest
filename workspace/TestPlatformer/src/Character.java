@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import org.newdawn.slick.*;
 
 public class Character {
@@ -22,6 +24,9 @@ public class Character {
 	int hurtBoxX;
 	int hurtBoxY;
 	int hurtSize;
+	
+	private ArrayList<Weapon> weapons; //private for player only, not npc
+	boolean isAttacking = false;
 	
 	int PLAYER =	0; //id number for characters
 	int NPC =		1;
@@ -100,24 +105,31 @@ public class Character {
 			}
 		}
 	}
-	/*public void loadCharacterImage(String file, int total) throws SlickException
+	//creates weapon object, run in specific subclasses
+	public void loadWeapon(String filePrefix, int totalFrames) throws SlickException
+	{
+		weapons.add(new Weapon(totalFrames));
+		
+		weapons.get(weapons.size()).loadAnimation(filePrefix); //load animation for most recent object
+	}
+	
+	public void attack()
 	{	
-		image = new Image(file);
-		width = (int) (image.getWidth()*scale);
-		height = (int) (image.getHeight()*scale); //must occur at start
-	}*/
+		isAttacking = true; //will loop attack indefinitely for now
+		System.out.println("attacking!");
+	}
 	
 	public void draw(int xShift)
 	{
-		if(currentAnimation != NORMAL) //if still, draw still instead of zeroeth animation
-		{
-			animation[currentAnimation].draw(x-xShift, y);
+		if (isAlive()) {
+			if (currentAnimation != NORMAL) //if still, draw still instead of zeroeth animation
+			{
+				animation[currentAnimation].draw(x - xShift, y);
+			} else {
+				image[0].draw(x - xShift, y, scale);
+			}
+			currentAnimation = NORMAL; //reset to check again
 		}
-		else
-		{
-			image[0].draw(x-xShift, y, scale);
-		}
-		currentAnimation = NORMAL; //reset to check again
 	}
 	
 	public void animateLeft() //changes current frame based on duration
@@ -157,19 +169,19 @@ public class Character {
 		hurtBoxX = (int) (x+width/2 - hurtSize/2);
 		hurtBoxY = (int) (y+height/2 - hurtSize/2);
 		
-		System.out.println(hurtBoxX + " , " + box.getX() + " , " + hurtBoxY + " , " + box.getY());
+		//System.out.println(hurtBoxX + " , " + box.getX() + " , " + hurtBoxY + " , " + box.getY());
 		
 		float xCenter = x+width/2;
 		float yCenter = y+height/2;
 		
 
-		/*if (yCenter >= box.getY() && yCenter <= (box.getY()+box.getHeight()))
+		if (yCenter >= box.getY() && yCenter <= (box.getY()+box.getHeight()))
 		{
 			if (xCenter >= box.getX() && xCenter <= (box.getX()+box.getWidth()))
 			{
 				return true;
 			}
-		}*/
+		}
 		
 		for(int j = hurtBoxY; j < hurtBoxY+hurtSize; j++)
 		{
@@ -193,60 +205,64 @@ public class Character {
 	//TODO switch to using "TOP_LEFT", etc...
 	public boolean checkCollision(PlatformLevel level, GameContainer gc, String direction)
 	{
-		if(direction.equals("right")) //check right collision
-		{
-			int xPos = (int)(x+width-1)/30; //divided by tile size
-			int yPosA = (int)(y)/30; //top
-			int yPosB = (int)(y+height/2)/30; //middle
-			int yPosC = (int)(y+height-1)/30; //bottom, but not floor
-			
-			//System.out.println(xPos + " , " + yPos);
-			
-			//simplified checker
-			if(level.barrier[xPos][yPosA]
-					|| level.barrier[xPos][yPosB]
-					|| level.barrier[xPos][yPosC]) //checks with boxes tile dimensions
+		try {
+			if(direction.equals("right")) //check right collision
 			{
-				x--;
-				checkCollision(level, gc, "right");
+				int xPos = (int)(x+width-1)/30; //divided by tile size
+				int yPosA = (int)(y)/30; //top
+				int yPosB = (int)(y+height/2)/30; //middle
+				int yPosC = (int)(y+height-1)/30; //bottom, but not floor
+				
+				//System.out.println(xPos + " , " + yPos);
+				
+				//simplified checker
+				if(level.barrier[xPos][yPosA]
+						|| level.barrier[xPos][yPosB]
+						|| level.barrier[xPos][yPosC]) //checks with boxes tile dimensions
+				{
+					x--;
+					checkCollision(level, gc, "right");
+				}
 			}
-		}
-		else if(direction.equals("left")) //check left collision
-		{
-			int xPos = (int)(x+1)/30; //divided by tile size
-			int yPosA = (int)(y+1)/30;
-			int yPosB = (int)(y+height/2)/30;
-			int yPosC = (int)(y+height-1)/30;
-			
-			//System.out.println(xPos + " , " + yPos);
-			
-			//simplified checker
-			if(level.barrier[xPos][yPosA]
-					|| level.barrier[xPos][yPosB]
-					|| level.barrier[xPos][yPosC]) //checks with boxes tile dimensions
+			else if(direction.equals("left")) //check left collision
 			{
-				x++;
-				checkCollision(level, gc, "left");
+				int xPos = (int)(x+1)/30; //divided by tile size
+				int yPosA = (int)(y+1)/30;
+				int yPosB = (int)(y+height/2)/30;
+				int yPosC = (int)(y+height-1)/30;
+				
+				//System.out.println(xPos + " , " + yPos);
+				
+				//simplified checker
+				if(level.barrier[xPos][yPosA]
+						|| level.barrier[xPos][yPosB]
+						|| level.barrier[xPos][yPosC]) //checks with boxes tile dimensions
+				{
+					x++;
+					checkCollision(level, gc, "left");
+				}
 			}
-		}
-		else if(direction.equals("up")) //check top collision
-		{
-			int xPosA = (int)(x+1)/30; //divided by tile size
-			int xPosB = (int)(x+width/2)/30; //checks middle of ch, left, and right
-			int xPosC = (int)(x+width-1)/30;
-			int yPos = (int)y/30;
-			
-			//System.out.println(xPos + " , " + yPos);
-			
-			//simplified checker for top collision
-			if(level.barrier[xPosA][yPos]
-					|| level.barrier[xPosB][yPos]
-					|| level.barrier[xPosC][yPos]) //checks with boxes tile dimensions
+			else if(direction.equals("up")) //check top collision
 			{
-				y++;
-				checkCollision(level, gc, "up");
-				return true;
+				int xPosA = (int)(x+1)/30; //divided by tile size
+				int xPosB = (int)(x+width/2)/30; //checks middle of ch, left, and right
+				int xPosC = (int)(x+width-1)/30;
+				int yPos = (int)y/30;
+				
+				//System.out.println(xPos + " , " + yPos);
+				
+				//simplified checker for top collision
+				if(level.barrier[xPosA][yPos]
+						|| level.barrier[xPosB][yPos]
+						|| level.barrier[xPosC][yPos]) //checks with boxes tile dimensions
+				{
+					y++;
+					checkCollision(level, gc, "up");
+					return true;
+				}
 			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return false;
 		}
 		return false; //only returns true if collision from above
 	}
@@ -254,35 +270,39 @@ public class Character {
 	
 	public boolean isOnFloor(PlatformLevel level, GameContainer gc)
 	{
-		//Input input = gc.getInput();
-		
-		//temp floor , will initiate death method:
-		if(y+height>=600) //falls to for
-		{
-			die();
-			return true; //false floor to prevent collision check
-		}
-		
-		//check if any of character is touching barrier
-		int xPosA = (int)(x+1)/30; //divided by tile size
-		int xPosB = (int)(x+width/2)/30; //check middle
-		int xPosC = (int)(x+width-1)/30; //check right
-		int yPos = (int)(y+height)/30;
-		
-		//System.out.println(xPos + " , " + yPos);
-		
-		//simplified checker
-		if(level.barrier[xPosA][yPos]
-				|| level.barrier[xPosB][yPos]
-				|| level.barrier[xPosC][yPos]) //checks with boxes tile dimensions
-		{
-			//System.out.println("is on floor");
-			return true;
+		try {
+			//Input input = gc.getInput();
+			
+			//temp floor , will initiate death method:
+			if(y+height>=600) //falls to for
+			{
+				die();
+				return true; //false floor to prevent collision check
+			}
+			
+			//check if any of character is touching barrier
+			int xPosA = (int)(x+1)/30; //divided by tile size
+			int xPosB = (int)(x+width/2)/30; //check middle
+			int xPosC = (int)(x+width-1)/30; //check right
+			int yPos = (int)(y+height)/30;
+			
+			//System.out.println(xPos + " , " + yPos);
+			
+			//simplified checker
+			if(level.barrier[xPosA][yPos]
+					|| level.barrier[xPosB][yPos]
+					|| level.barrier[xPosC][yPos]) //checks with boxes tile dimensions
+			{
+				//System.out.println("is on floor");
+				return true;
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return false;
 		}
 		return false;
 	}
 	
-	public boolean alive() //return true if player has 1 or more lives
+	public boolean isAlive() //return true if player has 1 or more lives
 	{
 		if(life > 0)
 		{

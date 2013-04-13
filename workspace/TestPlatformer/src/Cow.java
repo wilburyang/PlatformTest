@@ -15,7 +15,7 @@ public class Cow extends NPC {
 		//temporary:
 		x = xInit;
 		y = yInit;
-		xSpeed = 1.6f;
+		xSpeed = 1.0f;
 		
 		pRange = 100;
 		
@@ -33,11 +33,11 @@ public class Cow extends NPC {
 	{
 		if(!isFlipped)
 		{
-			weapon.setPosition((int)x+width, (int)(y + height/2-weapon.getHeight()/2), false); //overriden by subclasses
+			npcWeapon.setPosition((int)x+width, (int)(y + height/2-npcWeapon.getHeight()/2), false); //overriden by subclasses
 		}
 		else
 		{
-			weapon.setPosition((int)x-weapon.getWidth(), (int)(y + height/2-weapon.getHeight()/2), true); //overriden by subclasses
+			npcWeapon.setPosition((int)x-npcWeapon.getWidth(), (int)(y + height/2-npcWeapon.getHeight()/2), true); //overriden by subclasses
 		}
 		
 		//weapon.setHitBox();
