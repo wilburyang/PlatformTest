@@ -7,7 +7,7 @@ import org.newdawn.slick.SlickException;
 
 public class Cow extends NPC {
 
-	Cow(float xInit, float yInit) throws SlickException
+	Cow(float xInit, float yInit)
 	{
 		super(xInit, yInit);
 		life = 1; //default npc health
@@ -21,7 +21,11 @@ public class Cow extends NPC {
 		
 		soundFile = "data/testnpcsound.wav";
 		
-		loadWeapon("data/weapon/cow_fire", 5);
+		try {
+			loadWeapon("data/weapon/cow_fire", 5);
+		} catch (SlickException e) {
+			return;
+		}
 	}
 	
 	public void triggerNPC()

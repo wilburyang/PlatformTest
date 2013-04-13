@@ -25,7 +25,8 @@ public class Character {
 	int hurtBoxY;
 	int hurtSize;
 	
-	private ArrayList<Weapon> weapons; //private for player only, not npc
+	ArrayList<Weapon> weapons; //private for player only, not npc
+	int currentWeapon;
 	boolean isAttacking = false;
 	
 	int PLAYER =	0; //id number for characters
@@ -66,11 +67,21 @@ public class Character {
 		hurtBoxY = 0;
 		hurtSize = 0;
 		
+		totalFrames = 5; //temp
+		currentWeapon = 0; //default character weapon first
+		
 		currentAnimation = 0;
 		fDuration = 200; //ms?
 		//isOnTile = true;
 		
 		fallen = false;
+		
+		//consider moving out of constructor
+		try {
+			loadWeapon("data/weapon/cow_fire", 5);
+		} catch (SlickException e) {
+			return;
+		}
 	}
 	
 	public void loadAnimation(String fileName, String extension, int total) throws SlickException
@@ -108,9 +119,24 @@ public class Character {
 	//creates weapon object, run in specific subclasses
 	public void loadWeapon(String filePrefix, int totalFrames) throws SlickException
 	{
+		weapons = new ArrayList<Weapon>();
+		
 		weapons.add(new Weapon(totalFrames));
 		
-		weapons.get(weapons.size()).loadAnimation(filePrefix); //load animation for most recent object
+		weapons.get(weapons.size()-1).loadAnimation(filePrefix); //load animation for most recent object
+	}
+	
+	public void updateWeapon()
+	{
+		//update weapon position
+		/*if(!isFlipped)
+		{*/
+			weapons.get(currentWeapon).setPosition((int)x+width, (int)y, false); //overriden by subclasses
+		/*}
+		else
+		{
+			npcWeapon.setPosition((int)x-npcWeapon.getWidth(), (int)y, true); //overriden by subclasses
+		}*/
 	}
 	
 	public void attack()
@@ -129,6 +155,18 @@ public class Character {
 				image[0].draw(x - xShift, y, scale);
 			}
 			currentAnimation = NORMAL; //reset to check again
+		}
+		
+		if(isAttacking)
+		{
+			weapons.get(currentWeapon).setPosition((int)x+width,
+					(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), false);
+				
+			weapons.get(currentWeapon).drawActive(xShift);
+		}
+		else
+		{
+				weapons.get(currentWeapon).drawInactive(xShift);
 		}
 	}
 	
@@ -164,35 +202,32 @@ public class Character {
 		}
 	}*/
 	
-	public boolean checkHurtBox(Weapon box) //kills player if hit
+	public boolean checkHurtBox(NPC enemy) //kills player if hit by npc
 	{
-		hurtBoxX = (int) (x+width/2 - hurtSize/2);
-		hurtBoxY = (int) (y+height/2 - hurtSize/2);
-		
 		//System.out.println(hurtBoxX + " , " + box.getX() + " , " + hurtBoxY + " , " + box.getY());
 		
-		float xCenter = x+width/2;
-		float yCenter = y+height/2;
-		
-
-		if (yCenter >= box.getY() && yCenter <= (box.getY()+box.getHeight()))
-		{
-			if (xCenter >= box.getX() && xCenter <= (box.getX()+box.getWidth()))
-			{
-				return true;
+		if (enemy.isAttacking) {
+			hurtBoxX = (int) (x + width / 2 - hurtSize / 2);
+			hurtBoxY = (int) (y + height / 2 - hurtSize / 2);
+			float xCenter = x + width / 2;
+			float yCenter = y + height / 2;
+			if (yCenter >= enemy.npcWeapon.getY()
+					&& yCenter <= (enemy.npcWeapon.getY() + enemy.npcWeapon.getHeight())) {
+				if (xCenter >= enemy.npcWeapon.getX()
+						&& xCenter <= (enemy.npcWeapon.getX() + enemy.npcWeapon.getWidth())) {
+					return true;
+				}
 			}
-		}
-		
-		for(int j = hurtBoxY; j < hurtBoxY+hurtSize; j++)
-		{
-			for (int k = (int)box.getY(); k < box.getY()+box.getHeight(); k++)
-			{
-				if (j == k) {
-					for (int l = (int) hurtBoxX; l < hurtBoxX + hurtSize; l++) {
-						for (int m = (int) box.getX(); m < box.getX()+box.getWidth(); m++) {
-							if (l == m) {
-								System.out.println("hit!");
-								return true;
+			for (int j = hurtBoxY; j < hurtBoxY + hurtSize; j++) {
+				for (int k = (int) enemy.npcWeapon.getY(); k < enemy.npcWeapon.getY() + enemy.npcWeapon.getHeight(); k++) {
+					if (j == k) {
+						for (int l = (int) hurtBoxX; l < hurtBoxX + hurtSize; l++) {
+							for (int m = (int) enemy.npcWeapon.getX(); m < enemy.npcWeapon.getX()
+									+ enemy.npcWeapon.getWidth(); m++) {
+								if (l == m) {
+									System.out.println("hit!");
+									return true;
+								}
 							}
 						}
 					}

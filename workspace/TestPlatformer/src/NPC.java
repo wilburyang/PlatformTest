@@ -103,6 +103,51 @@ public class NPC extends Character {
 		{
 			npcWeapon.setPosition((int)x-npcWeapon.getWidth(), (int)y, true); //overriden by subclasses
 		}
+		
+		//checks if attacked
+		if(checkHurtBox(ch))
+		{
+			die();
+		}
+	}
+	
+	public boolean checkHurtBox(Character enemy) //kills player if hit
+	{
+		//System.out.println(hurtBoxX + " , " + box.getX() + " , " + hurtBoxY + " , " + box.getY());
+		
+		if (enemy.isAttacking) {
+			hurtBoxX = (int) (x + width / 2 - hurtSize / 2);
+			hurtBoxY = (int) (y + height / 2 - hurtSize / 2);
+			float xCenter = x + width / 2;
+			float yCenter = y + height / 2;
+			if (yCenter >= enemy.weapons.get(enemy.currentWeapon).getY()
+					&& yCenter <= (enemy.weapons.get(enemy.currentWeapon).getY()
+							+ enemy.weapons.get(enemy.currentWeapon).getHeight())) {
+				if (xCenter >= enemy.weapons.get(enemy.currentWeapon).getX()
+						&& xCenter <= (enemy.weapons.get(enemy.currentWeapon).getX()
+								+ enemy.weapons.get(enemy.currentWeapon).getWidth())) {
+					return true;
+				}
+			}
+			for (int j = hurtBoxY; j < hurtBoxY + hurtSize; j++) {
+				for (int k = (int) enemy.weapons.get(enemy.currentWeapon).getY();
+						k < enemy.weapons.get(enemy.currentWeapon).getY() + enemy.weapons.get(enemy.currentWeapon).getHeight(); k++) {
+					if (j == k) {
+						for (int l = (int) hurtBoxX; l < hurtBoxX + hurtSize; l++) {
+							for (int m = (int) enemy.weapons.get(enemy.currentWeapon).getX();
+									m < enemy.weapons.get(enemy.currentWeapon).getX()
+									+ enemy.weapons.get(enemy.currentWeapon).getWidth(); m++) {
+								if (l == m) {
+									System.out.println("hit!");
+									return true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	private String proximityCheck(Character ch) //checks if player is near npc and returns which side

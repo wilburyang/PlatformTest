@@ -55,9 +55,19 @@ public class GameplayState extends BasicGameState {
     	
     	SoundStore.get().poll(0); //may not be needed
     	
-		if (player1.isAlive()) //onlyd move player if still alive, otherwise death animation
+		if (player1.isAlive()) //only move player if still alive, otherwise death animation
 		{
 			wall(player1, lvl1); //keeps from moving off left of screen
+			
+			if (input.isKeyDown(Input.KEY_SPACE)) //normal movement on ground
+			{
+				player1.updateWeapon(); //temporary attack test
+				player1.attack();
+			}
+			else
+			{
+				player1.isAttacking = false;
+			}
 			
 			if (input.isKeyDown(Input.KEY_D)) //normal movement on ground
 			{
@@ -92,7 +102,7 @@ public class GameplayState extends BasicGameState {
 			
 			for(int i = 0; i < lvl1.allNPC.size(); i++)
 			{
-				if(player1.checkHurtBox(lvl1.allNPC.get(i).npcWeapon))
+				if(player1.checkHurtBox(lvl1.allNPC.get(i)))
 				{
 					player1.die();
 				}
@@ -193,9 +203,9 @@ public class GameplayState extends BasicGameState {
 		{
 			ch.x = 0;
 		}
-		if(ch.x+ch.width > lvl.floorLength-30)
+		if(ch.x+ch.width > lvl.floorLength)
 		{
-			ch.x = lvl.floorLength - ch.width-30;
+			ch.x = lvl.floorLength - ch.width;
 		}
 	}
 }
