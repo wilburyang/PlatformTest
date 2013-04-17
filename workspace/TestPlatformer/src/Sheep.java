@@ -1,13 +1,9 @@
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
 
-//flamethrowing cow class
-//describes unique trigger behavior for flamethrowing cow
-
-//TODO Will contain unique image, behavior, and sound effects
-
-public class Cow extends NPC {
-
-	Cow(float xInit, float yInit)
+public class Sheep extends NPC {
+	
+	Sheep(float xInit, float yInit)
 	{
 		super(xInit, yInit);
 		life = 1; //default npc health
@@ -18,6 +14,8 @@ public class Cow extends NPC {
 		xSpeed = 1.0f;
 		
 		pRange = 100;
+		
+		totalFrames = 1;
 		
 		soundFile = "data/testnpcsound.wav";
 		

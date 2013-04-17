@@ -122,6 +122,7 @@ public class PlatformLevel {
 			for (int yAxis=0;yAxis<tileFloor.getHeight(); yAxis++)
 	    	{
 				int tileID = tileFloor.getTileId(xAxis, yAxis, npcLayerIndex);
+				int tileID2 = tileFloor.getTileId(xAxis, yAxis, npcLayerIndex+1);
 				
 				if(tileID > 0) //temp force draw cow
 				{
@@ -135,6 +136,21 @@ public class PlatformLevel {
 					if(tileID == 860) //temporary brute force method
 					{
 						allNPC.get(npcIndex).setType("cow");
+					}
+					npcIndex++;
+				}
+				if(tileID2 > 0) //temp force draw sheep
+				{
+					allNPC.add(new Cow(xAxis*30, yAxis*30)); //temporarily cow class specifically
+					
+					//temporary load, to be copying
+					allNPC.get(npcIndex).loadAnimation("data/sheep", ".png", 3);
+					
+					System.out.println(xAxis*30 + " , " + yAxis*30);
+					
+					if(tileID == 861) //temporary brute force method
+					{
+						allNPC.get(npcIndex).setType("sheep");
 					}
 					npcIndex++;
 				}
