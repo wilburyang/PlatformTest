@@ -4,16 +4,24 @@ import org.newdawn.slick.*;
 
 public class Character {
 
-	Image image[] = null;
+	//Image image[] = null;
 	int totalFrames; //may not be needed
 	protected int currentAnimation;
 	private int fDuration; //amount of time frames remain
-	Animation animation[] = null;
+	
+	Animation neutralAnimation, leftAnimation, rightAnimation, jumpAnimation, fallAnimation, attackAnimation;
+	
+	boolean isAttacking = false;
 	
 	protected final int NORMAL =		0;
 	protected final int LEFT =		1;
 	protected final int RIGHT =		2;
 	protected final int JUMP =		3;
+	protected final int FALL =		4;
+	//protected final int ATTACK =		5;
+	
+	int state = NORMAL; //default normal
+	int direction = RIGHT; //default right
 	
 	protected int life;
 	int height;
@@ -27,7 +35,6 @@ public class Character {
 	
 	ArrayList<Weapon> weapons; //private for player only, not npc
 	int currentWeapon;
-	boolean isAttacking = false;
 	
 	int PLAYER =	0; //id number for characters
 	int NPC =		1;
@@ -85,36 +92,50 @@ public class Character {
 	}
 	
 	public void loadAnimation(String fileName, String extension, int total) throws SlickException
-	{
-		loadImage(fileName, extension, total);
+	{	
+		neutralAnimation = new Animation();
+		leftAnimation = new Animation();
+		rightAnimation = new Animation();
+		jumpAnimation = new Animation(); //number of frames temporary
+		attackAnimation = new Animation(); //number of frames temporary
 		
-		width = (int) (image[0].getWidth()*scale);
-		height = (int) (image[0].getHeight()*scale); //must occur at start
+		//temp loads all the same, temp start at image0.png
+		neutralAnimation = new Animation(
+				loadImage(fileName, extension, 1, 0), fDuration); //will be different sub sections of image array
+		leftAnimation = new Animation(
+				loadImage(fileName, extension, total, 0), fDuration);
+		rightAnimation = new Animation(
+				loadImage(fileName, extension, total, 0), fDuration);
+		jumpAnimation = new Animation(
+				loadImage(fileName, extension, total, 0), fDuration);
+		fallAnimation = new Animation(
+				loadImage(fileName, extension, total, 0), fDuration);
+		attackAnimation = new Animation(
+				loadImage(fileName, extension, total, 0), fDuration);
+		
+		//set dimensions of character image
+		width = (int) (neutralAnimation.getCurrentFrame().getWidth()*scale);
+		height = (int) (neutralAnimation.getCurrentFrame().getHeight()*scale); //must occur at start
 		hurtSize = (int) width; //set hurtbox dimensions (square)
-		
-		animation = new Animation[3];
-		
-		for(int i = 1; i < 3; i++)
-		{
-			animation[i] = new Animation(image, fDuration); //will be different sub sections of image array
-		}
 	}
 	
-	private void loadImage(String fileName, String extension, int total) throws SlickException
+	private Image[] loadImage(String fileName, String extension, int total, int start) throws SlickException
 	{
 		totalFrames = total;
-		image = new Image[totalFrames];
+		Image image[] = new Image[totalFrames];
 		
-		for(int frame = 0; frame < totalFrames; frame++) //load each frame to image array
+		for(int frame = start; frame < totalFrames; frame++) //load each frame to image array
 		{
 			try
 			{
 				image[frame] = new Image(fileName + frame + extension);
 			} catch (SlickException e) {
 				System.err.println("Image file not found: " + fileName+frame+extension);
-				return;
+				return null;
 			}
 		}
+		
+		return image;
 	}
 	//creates weapon object, run in specific subclasses
 	public void loadWeapon(String filePrefix, int totalFrames) throws SlickException
@@ -143,41 +164,48 @@ public class Character {
 	{	
 		isAttacking = true; //will loop attack indefinitely for now
 		System.out.println("attacking!");
+		weapons.get(currentWeapon).setPosition((int)x+width,
+				(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), false);
 	}
 	
 	public void draw(int xShift)
 	{
-		if (isAlive()) {
-			if (currentAnimation != NORMAL) //if still, draw still instead of zeroeth animation
+		if (isAlive()) 
+		{
+			switch (state)
 			{
-				animation[currentAnimation].draw(x - xShift, y);
-			} else {
-				image[0].draw(x - xShift, y, scale);
+			case LEFT: leftAnimation.draw(x - xShift, y);
+			break;
+			case RIGHT: rightAnimation.draw(x - xShift, y);
+			break;
+			case JUMP: jumpAnimation.draw(x - xShift, y);
+			break;
+			case FALL: fallAnimation.draw(x - xShift, y);
+			break;
+			default: neutralAnimation.draw(x - xShift, y);
 			}
-			currentAnimation = NORMAL; //reset to check again
-		}
+			
+			state = NORMAL; //reset to check again TODO consider moving out of render
 		
-		if(isAttacking)
-		{
-			weapons.get(currentWeapon).setPosition((int)x+width,
-					(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), false);
-				
-			weapons.get(currentWeapon).drawActive(xShift);
-		}
-		else
-		{
+			if(isAttacking)
+			{	
+				weapons.get(currentWeapon).drawActive(xShift);
+			}
+			else
+			{
 				weapons.get(currentWeapon).drawInactive(xShift);
+			}
 		}
 	}
 	
 	public void animateLeft() //changes current frame based on duration
 	{
-		currentAnimation = LEFT;
+		state = LEFT;
 	}
 	
 	public void animateRight() //changes current frame based on duration
 	{
-		currentAnimation = RIGHT;
+		state = RIGHT;
 	}
 	
 	//jump method, make smooth
@@ -333,6 +361,15 @@ public class Character {
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
+		}
+		//if not on floor
+		if(ySpeed > gCount)
+		{
+			state = JUMP;
+		}
+		if(ySpeed < gCount)
+		{
+			state = FALL;
 		}
 		return false;
 	}

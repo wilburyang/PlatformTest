@@ -199,26 +199,33 @@ public class NPC extends Character {
 	
 	public void draw(int xShift)
 	{
-		if(currentAnimation != NORMAL) //if still, draw still instead of zeroeth animation
-		{
-			animation[currentAnimation].draw(x-xShift, y);
-		}
-		else
-		{
-			image[0].draw(x-xShift, y, scale);
-		}
-		currentAnimation = NORMAL; //reset to check again
-		
-		if(isAttacking)
-		{
-			npcWeapon.setPosition((int)x+width,
-				(int)(y + height/2-npcWeapon.getHeight()/2), false);
+		if (isAlive()) {
+			switch (state)
+			{
+			case LEFT: leftAnimation.draw(x - xShift, y);
+			break;
+			case RIGHT: rightAnimation.draw(x - xShift, y);
+			break;
+			case JUMP: jumpAnimation.draw(x - xShift, y);
+			break;
+			case FALL: fallAnimation.draw(x - xShift, y);
+			break;
+			default: neutralAnimation.draw(x - xShift, y);
+			}
 			
-			npcWeapon.drawActive(xShift);
-		}
-		else
-		{
-			npcWeapon.drawInactive(xShift);
+			state = NORMAL; //reset to check again TODO consider moving out of render
+		
+			if(isAttacking)
+			{
+				npcWeapon.setPosition((int)x+width,
+					(int)(y + height/2-npcWeapon.getHeight()/2), false);
+				
+				npcWeapon.drawActive(xShift);
+			}
+			else
+			{
+				npcWeapon.drawInactive(xShift);
+			}
 		}
 	}
 	
