@@ -59,16 +59,6 @@ public class GameplayState extends BasicGameState {
 		{
 			wall(player1, lvl1); //keeps from moving off left of screen
 			
-			if (input.isKeyDown(Input.KEY_SPACE)) //normal movement on ground
-			{
-				player1.updateWeapon(); //temporary attack test
-				player1.attack();
-			}
-			else
-			{
-				player1.isAttacking = false;
-			}
-			
 			if (input.isKeyDown(Input.KEY_D)) //normal movement on ground
 			{
 				//add horizontal acceleration in air
@@ -86,6 +76,17 @@ public class GameplayState extends BasicGameState {
 			if (input.isKeyDown(Input.KEY_W)) //jump command
 			{
 				player1.jump(delta);
+			}
+			//check attack key after movement update
+			if (input.isKeyDown(Input.KEY_SPACE)) //normal movement on ground
+			{
+				player1.updateWeapon(); //temporary attack test
+				player1.attack();
+			}
+			else
+			{
+				player1.isAttacking = false;
+				player1.attackCounter = 0; //reset counter
 			}
 		}
 		if(input.isKeyDown(Input.KEY_P)) //pause menu

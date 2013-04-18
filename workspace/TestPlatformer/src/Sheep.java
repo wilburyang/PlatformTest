@@ -35,19 +35,19 @@ public class Sheep extends NPC {
 	{
 		if(!isFlipped)
 		{
-			npcWeapon.setPosition((int)x+width, (int)(y + height/2-npcWeapon.getHeight()/2), false); //overriden by subclasses
+			npcWeapon.setPosition((int)x+width, (int)(y + height/2-npcWeapon.getHeight()/2), direction); //overriden by subclasses
 		}
 		else
 		{
-			npcWeapon.setPosition((int)x-npcWeapon.getWidth(), (int)(y + height/2-npcWeapon.getHeight()/2), true); //overriden by subclasses
+			npcWeapon.setPosition((int)x-npcWeapon.getWidth(), (int)(y + height/2-npcWeapon.getHeight()/2), direction); //overriden by subclasses
 		}
 		
 		//weapon.setHitBox();
 		
 		isAttacking = true; //will loop attack indefinitely for now
-		System.out.println("attacking!");
+		//System.out.println("attacking!");
 		weapons.get(currentWeapon).setPosition((int)x+width,
-				(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), false);
+				(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), direction);
 	}
 	
 	public void draw(int xShift)

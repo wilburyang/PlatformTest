@@ -37,17 +37,17 @@ public class Cow extends NPC {
 	{
 		if(!isFlipped)
 		{
-			npcWeapon.setPosition((int)x+width, (int)(y + height/2-npcWeapon.getHeight()/2), false); //overriden by subclasses
+			npcWeapon.setPosition((int)x+width, (int)(y + height/2-npcWeapon.getHeight()/2), direction); //overriden by subclasses
 		}
 		else
 		{
-			npcWeapon.setPosition((int)x-npcWeapon.getWidth(), (int)(y + height/2-npcWeapon.getHeight()/2), true); //overriden by subclasses
+			npcWeapon.setPosition((int)x-npcWeapon.getWidth(), (int)(y + height/2-npcWeapon.getHeight()/2), direction); //overriden by subclasses
 		}
 		
 		//weapon.setHitBox();
 		
 		isAttacking = true; //will loop attack indefinitely for now
-		System.out.println("attacking!");
+		//System.out.println("attacking!");
 	}
 	
 	public void draw(int xShift)
@@ -65,13 +65,11 @@ public class Cow extends NPC {
 			break;
 			default: neutralAnimation.draw(x - xShift, y);
 			}
-			
-			state = NORMAL; //reset to check again TODO consider moving out of render
 		
 			if(isAttacking)
 			{
 				npcWeapon.setPosition((int)x+width,
-						(int)(y + height/2-npcWeapon.getHeight()/2), false);
+						(int)(y + height/2-npcWeapon.getHeight()/2), RIGHT);
 				
 				npcWeapon.drawActive(xShift);
 			}
@@ -79,6 +77,8 @@ public class Cow extends NPC {
 			{
 				npcWeapon.drawInactive(xShift);
 			}
+			
+			state = NORMAL; //reset to check again TODO consider moving out of render
 		}
 	}
 }

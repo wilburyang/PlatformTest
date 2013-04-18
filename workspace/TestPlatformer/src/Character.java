@@ -7,10 +7,11 @@ public class Character {
 	//Image image[] = null;
 	int totalFrames; //may not be needed
 	protected int currentAnimation;
-	private int fDuration; //amount of time frames remain
+	private int fDuration; //amount of time in frames remain
 	
 	Animation neutralAnimation, leftAnimation, rightAnimation, jumpAnimation, fallAnimation, attackAnimation;
 	
+	int attackCounter = 0; //counts attack duration in frames
 	boolean isAttacking = false;
 	
 	protected final int NORMAL =		0;
@@ -20,8 +21,8 @@ public class Character {
 	protected final int FALL =		4;
 	//protected final int ATTACK =		5;
 	
-	int state = NORMAL; //default normal
-	int direction = RIGHT; //default right
+	int state = NORMAL; //default normal, how the character is moving
+	int direction = RIGHT; //where the character is facing
 	
 	protected int life;
 	int height;
@@ -149,10 +150,32 @@ public class Character {
 	
 	public void updateWeapon()
 	{
+		//TODO this is a temporary update, final will update hitbox
+		//based on some currentWeapon parameter
+		//should consider update move to weapon class
+		
+		if(direction == RIGHT)
+		{
+			//positions weapon to right of character
+			weapons.get(currentWeapon).setPosition((int)x+width,
+				(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), RIGHT);
+		}
+		else if(direction == LEFT)
+		{
+			//position weapon to left of character
+			weapons.get(currentWeapon).setPosition((int)x-weapons.get(currentWeapon).getWidth(),
+					(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), LEFT);
+		}
+		else //temp default to the right
+		{
+			weapons.get(currentWeapon).setPosition((int)x+width,
+					(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), RIGHT);
+		}
+		
 		//update weapon position
 		/*if(!isFlipped)
 		{*/
-			weapons.get(currentWeapon).setPosition((int)x+width, (int)y, false); //overriden by subclasses
+			//weapons.get(currentWeapon).setPosition((int)x+width, (int)y, false); //overriden by subclasses
 		/*}
 		else
 		{
@@ -163,9 +186,14 @@ public class Character {
 	public void attack()
 	{	
 		isAttacking = true; //will loop attack indefinitely for now
+		
+		updateWeapon(); //updates weapon position
+		
+		if(attackCounter > 0)
+		{
+			attackCounter++;
+		}
 		System.out.println("attacking!");
-		weapons.get(currentWeapon).setPosition((int)x+width,
-				(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), false);
 	}
 	
 	public void draw(int xShift)
@@ -184,8 +212,6 @@ public class Character {
 			break;
 			default: neutralAnimation.draw(x - xShift, y);
 			}
-			
-			state = NORMAL; //reset to check again TODO consider moving out of render
 		
 			if(isAttacking)
 			{	
@@ -195,17 +221,21 @@ public class Character {
 			{
 				weapons.get(currentWeapon).drawInactive(xShift);
 			}
+			
+			state = NORMAL; //reset to check again TODO consider moving out of render
 		}
 	}
 	
 	public void animateLeft() //changes current frame based on duration
 	{
-		state = LEFT;
+		state = LEFT; //walking left
+		direction = LEFT; //facing left
 	}
 	
 	public void animateRight() //changes current frame based on duration
 	{
-		state = RIGHT;
+		state = RIGHT; //walking right
+		direction = RIGHT; //facing right
 	}
 	
 	//jump method, make smooth

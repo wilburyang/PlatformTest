@@ -94,7 +94,7 @@ public class NPC extends Character {
 			xSpeed *= -1;
 		}
 		
-		//update weapon position
+		/*update weapon position
 		if(!isFlipped)
 		{
 			npcWeapon.setPosition((int)x+width, (int)y, false); //overriden by subclasses
@@ -102,7 +102,7 @@ public class NPC extends Character {
 		else
 		{
 			npcWeapon.setPosition((int)x-npcWeapon.getWidth(), (int)y, true); //overriden by subclasses
-		}
+		}*/
 		
 		//checks if attacked
 		if(checkHurtBox(ch))

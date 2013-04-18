@@ -16,7 +16,9 @@ public class Weapon {
 	private int x; //position of animation on x axis
 	private int y; //position on y axis
 	
-	private boolean direction; //default = false = facing right
+	final int LEFT = 1; //values to match character direction vars
+	final int RIGHT = 2;
+	int direction; //default = 0 = facing right
 	
 	//boolean[][] hitBox;
 	
@@ -25,7 +27,7 @@ public class Weapon {
 		totalFrames = frameCount;
 		
 		//defaults:
-		direction = false; //to right
+		direction = 2; //to right
 		duration = 200; //ms
 		delay = 2000; //ms
 	}
@@ -50,7 +52,7 @@ public class Weapon {
 		
 		animation = new Animation();
 		
-		setPosition(0, 0, false); //initialized position
+		setPosition(0, 0, direction); //initialized position
 		
 		/*initialize hitBox for collision detection
 		hitBox = new boolean
@@ -99,11 +101,11 @@ public class Weapon {
 		return animation.getHeight();
 	}
 	
-	public void setPosition(int xPosition, int yPosition, boolean flip)
+	public void setPosition(int xPosition, int yPosition, int dir)
 	{
 		x = xPosition;
 		y = yPosition;
-		direction = flip;
+		direction = dir;
 	}
 	
 	/*public void setHitBox() //edits hitBox to match current frame
@@ -129,8 +131,13 @@ public class Weapon {
 	
 	public void drawActive(int shift)
 	{
-		if(!direction)
+		if(direction == RIGHT)
 		{
+			animation.draw(x-shift, y);
+		}
+		else if(direction == LEFT)
+		{
+			//animation.getCurrentFrame().getFlippedCopy(true, false).draw(x-shift, y); //flipped
 			animation.draw(x-shift, y);
 		}
 		else
