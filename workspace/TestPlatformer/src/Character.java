@@ -7,18 +7,18 @@ public class Character {
 	//Image image[] = null;
 	int totalFrames; //may not be needed
 	protected int currentAnimation;
-	private int fDuration; //amount of time in frames remain
+	protected int fDuration; //amount of time in frames remain
 	
 	Animation neutralAnimation, leftAnimation, rightAnimation, jumpAnimation, fallAnimation, attackAnimation;
 	
 	int attackCounter = 0; //counts attack duration in frames
 	boolean isAttacking = false;
 	
-	protected final int NORMAL =		0;
-	protected final int LEFT =		1;
-	protected final int RIGHT =		2;
-	protected final int JUMP =		3;
-	protected final int FALL =		4;
+	static final int NORMAL =		0;
+	static final int LEFT =		1;
+	static final int RIGHT =		2;
+	static final int JUMP =		3;
+	static final int FALL =		4;
 	//protected final int ATTACK =		5;
 	
 	int state = NORMAL; //default normal, how the character is moving

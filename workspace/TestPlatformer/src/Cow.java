@@ -17,6 +17,8 @@ public class Cow extends NPC {
 		y = yInit;
 		xSpeed = 1.0f;
 		
+		fDuration = 60;
+		
 		pRange = 100;
 		
 		soundFile = "data/testnpcsound.wav";
@@ -33,8 +35,45 @@ public class Cow extends NPC {
 		
 	}
 	
+	public void updateWeapon()
+	{
+		//TODO this is a temporary update, final will update hitbox
+		//based on some currentWeapon parameter
+		//should consider update move to weapon class
+		if(attackCounter > 0)
+		{
+			attackCounter++;
+		}
+		if(attackCounter >= fDuration)
+		{
+			attackCounter = 0;
+		}
+		
+		if(direction == RIGHT)
+		{
+			//positions weapon to right of character
+			npcWeapon.setPosition((int)x+width,
+				(int)(y + height/2-npcWeapon.getHeight()/2), RIGHT);
+		}
+		else if(direction == LEFT)
+		{
+			//position weapon to left of character
+			npcWeapon.setPosition((int)x-npcWeapon.getWidth(),
+					(int)(y + height/2-npcWeapon.getHeight()/2), LEFT);
+		}
+		else //temp default to the right
+		{
+			weapons.get(currentWeapon).setPosition((int)x+width,
+					(int)(y + height/2-weapons.get(currentWeapon).getHeight()/2), RIGHT);
+		}
+	}
+	
 	public void attack() //use weapon
 	{
+		updateWeapon();
+		
+		isAttacking = false; //reset for check
+		
 		if(!isFlipped)
 		{
 			npcWeapon.setPosition((int)x+width, (int)(y + height/2-npcWeapon.getHeight()/2), direction); //overriden by subclasses
@@ -45,8 +84,14 @@ public class Cow extends NPC {
 		}
 		
 		//weapon.setHitBox();
-		
-		isAttacking = true; //will loop attack indefinitely for now
+		if(!isAttacking && attackCounter < fDuration/2) //leave half of time for delay
+		{
+			isAttacking = true;
+		}
+		if(attackCounter == 0)
+		{
+			attackCounter = 1; //start count
+		}
 		//System.out.println("attacking!");
 	}
 	

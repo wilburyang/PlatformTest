@@ -71,7 +71,7 @@ public class Sheep extends NPC {
 			if(isAttacking)
 			{
 				npcWeapon.setPosition((int)x+width,
-						(int)(y + height/2-npcWeapon.getHeight()/2), false);
+						(int)(y + height/2-npcWeapon.getHeight()/2), direction);
 				
 				npcWeapon.drawActive(xShift);
 			}
