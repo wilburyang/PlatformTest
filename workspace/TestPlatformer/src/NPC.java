@@ -266,11 +266,11 @@ public class NPC extends Character {
 		
 		if(!soundEffect.isPlaying())
 		{
-			if(delay(startTime, r)){
+			//if(delay(startTime, r)){
 				r = (random.nextInt(10)+8)*500;
 				soundEffect.playAsSoundEffect(1.0f, (float) volumeScale*0.75f, false);	
 				startTime = System.currentTimeMillis() + 2000;
-			}
+			//}
 
 		}
 	}
