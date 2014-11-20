@@ -1,10 +1,10 @@
-import java.io.IOException;
-import java.util.Random;
-
-import org.newdawn.slick.*;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.util.ResourceLoader;
+
+import java.io.IOException;
+import java.util.Random;
 
 public class NPC extends Character {
 
@@ -80,7 +80,7 @@ public class NPC extends Character {
 			xSpeed *= -1;
 		}
 		
-		if(xSpeed >= 0 && checkCollision(barriers, "right") == "right") //if it bumps into right, go left
+		if(xSpeed >= 0 && checkCollision(barriers, "right").equals("right")) //if it bumps into right, go left
 		{
 			//System.out.println("right bump");
 			xSpeed *= -1;
